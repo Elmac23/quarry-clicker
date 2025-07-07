@@ -1,14 +1,15 @@
 import { Recipe, RECIPES } from "@/data/recipes";
 import { useAppDispatch, useAppSelector } from "./redux";
-import { ItemKey } from "@/data/items";
+import { ItemKey, ITEMS } from "@/data/items";
 import { addItem, removeItem } from "@/store/inventory";
+import { useEffect } from "react";
 
 export function useCrafting() {
   const { items } = useAppSelector((state) => state.inventory);
   const dispatch = useAppDispatch();
 
   const recipesWithAnnotations = [];
-
+  useEffect(() => {}, [items]);
   for (const [k, v] of Object.entries(RECIPES)) {
     const result = k as ItemKey;
     const { quantity, recipe } = v as Recipe;
@@ -25,8 +26,15 @@ export function useCrafting() {
       return {
         ...predicate,
         isSatisfied,
+        totalItemInInventory,
       };
     });
+
+    if (
+      ITEMS[result].type === "tool" &&
+      items.some((item) => item?.id === result)
+    )
+      canCraft = false;
 
     recipesWithAnnotations.push({
       canCraft,
@@ -43,3 +51,7 @@ export function useCrafting() {
 
   return recipesWithAnnotations;
 }
+
+export type RecipesWithAnnotations = ReturnType<typeof useCrafting>;
+export type RecipeWithAnnotations = RecipesWithAnnotations[number];
+export type IngredientsWithAnnotation = RecipeWithAnnotations["ingerdients"];

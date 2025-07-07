@@ -1,6 +1,6 @@
 import { useCrafting } from "@/hooks/useCrafting";
 import React from "react";
-import { Button } from "./ui/button";
+import Button from "./button";
 
 function Crafting() {
   const recipes = useCrafting();

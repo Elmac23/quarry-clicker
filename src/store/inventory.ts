@@ -16,7 +16,7 @@ interface InventoryState {
   selectedPickaxe: ItemToolKey;
 }
 
-const INITIAL_SIZE = 10;
+const INITIAL_SIZE = 100;
 
 const START_INVENTORY: ItemArray = Array(INITIAL_SIZE).fill(null);
 START_INVENTORY[0] = { id: "woodenPickaxe", quantity: 1 };
@@ -32,6 +32,12 @@ export const inventorySlice = createSlice({
   name: "inventory",
   initialState,
   reducers: {
+    deleteItemAtIndex(state, action: PayloadAction<number>) {
+      console.log(action.payload);
+      state.items[action.payload] = null;
+      return state;
+    },
+
     selectPickaxe(state, action: PayloadAction<{ pickaxe: ItemToolKey }>) {
       state.selectedPickaxe = action.payload.pickaxe;
     },
@@ -111,6 +117,7 @@ export const inventorySlice = createSlice({
   },
 });
 
-export const { addItem, removeItem, selectPickaxe } = inventorySlice.actions;
+export const { addItem, removeItem, selectPickaxe, deleteItemAtIndex } =
+  inventorySlice.actions;
 
 export default inventorySlice.reducer;

@@ -1,52 +1,50 @@
 "use client";
 
-import Crafting from "@/components/crafting";
-import Inventory from "@/components/inventory";
-import { Button } from "@/components/ui/button";
-import { ITEMS } from "@/data/items";
-import { MINES } from "@/data/mines";
+import Button from "@/components/button";
+import BottomMenu from "@/components/ui/menu";
+import Ore from "@/components/ui/ore";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
-import { useComputeChance } from "@/hooks/useComputeChance";
-import { chancesFromMine } from "@/lib/chancesFromMine";
+
+import { changeMine } from "@/store/mine";
 import { addItem } from "@/store/inventory";
-import { changeMine, dealDamage, resetHealth } from "@/store/mine";
+import { ITEMS, ItemKey } from "@/data/items";
 
 export default function Home() {
   const dispatch = useAppDispatch();
   const { mine, health } = useAppSelector((state) => state.mine);
   const { selectedPickaxe } = useAppSelector((state) => state.inventory);
-  const { entities, standard } = chancesFromMine(MINES[mine]);
-  const getDrop = useComputeChance(entities, standard, 1000);
 
-  const handleClick = () => {
-    const damage = ITEMS[selectedPickaxe].damage;
-    const newHealth = health - damage;
-
-    dispatch(dealDamage(damage));
-
-    if (newHealth <= 0) {
-      dispatch(resetHealth());
-      dispatch(
-        addItem({
-          amount: 1,
-          item: getDrop(),
-        })
-      );
-    }
+  const addAllItemsToInventory = () => {
+    Object.keys(ITEMS).forEach((itemKey) => {
+      dispatch(addItem({ item: itemKey as ItemKey, amount: 1 }));
+    });
   };
 
   return (
     <>
       <h1 className="text-2xl">
-        {mine} hp: {health}
+        {mine} hp: {health} || {selectedPickaxe}
       </h1>
-      <Inventory />
-      <Button onClick={() => handleClick()}>Get stone!</Button>
-      <Button onClick={() => dispatch(changeMine("coalMine"))}>
+
+      <Ore />
+      <Button
+        className="mx-2 "
+        size="md"
+        onClick={() => dispatch(changeMine("coalMine"))}
+      >
         Coal mine!
       </Button>
-      <Button onClick={() => dispatch(changeMine("test"))}>Test mine!</Button>
-      <Crafting />
+      <Button size="lg" onClick={() => dispatch(changeMine("testMine"))}>
+        Test mine!
+      </Button>
+      <Button
+        size="md"
+        onClick={addAllItemsToInventory}
+        className="mx-2 bg-green-600 hover:bg-green-700"
+      >
+        Add All Items (UI Test)
+      </Button>
+      <BottomMenu />
     </>
   );
 }

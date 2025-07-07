@@ -1,11 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import inventoryReducer from "./inventory";
 import mineReducer from "./mine";
+import modalReducer from "./modal";
 
 export const store = configureStore({
   reducer: {
     inventory: inventoryReducer,
     mine: mineReducer,
+    modal: modalReducer,
   },
 });
 

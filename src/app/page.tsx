@@ -8,6 +8,7 @@ import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import { changeMine } from "@/store/mine";
 import { addItem } from "@/store/inventory";
 import { ITEMS, ItemKey } from "@/data/items";
+import Notifiactions from "@/components/ui/notification";
 
 export default function Home() {
   const dispatch = useAppDispatch();
@@ -44,6 +45,7 @@ export default function Home() {
       >
         Add All Items (UI Test)
       </Button>
+      <Notifiactions />
       <BottomMenu />
     </>
   );

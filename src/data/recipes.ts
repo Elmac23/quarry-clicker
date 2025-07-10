@@ -146,4 +146,50 @@ export const RECIPES = {
       { item: "glass", quantity: 1 },
     ],
   },
+  emerald: {
+    quantity: 10,
+    recipe: [
+      {
+        item: "amethyst",
+        quantity: 5,
+      },
+      {
+        item: "opal",
+        quantity: 5,
+      },
+    ],
+  },
+  food: {
+    quantity: 1,
+    recipe: [
+      {
+        item: "ruby",
+        quantity: 1,
+      },
+      {
+        item: "amethyst",
+        quantity: 1,
+      },
+      {
+        item: "emerald",
+        quantity: 1,
+      },
+      {
+        item: "topaz",
+        quantity: 1,
+      },
+      {
+        item: "diamond",
+        quantity: 1,
+      },
+      {
+        item: "sapphire",
+        quantity: 1,
+      },
+      {
+        item: "opal",
+        quantity: 1,
+      },
+    ],
+  },
 } as const satisfies Partial<Record<ItemKey, Recipe>>;

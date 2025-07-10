@@ -7,6 +7,7 @@ type SpriteProps = React.ComponentProps<typeof Image>;
 function Sprite({ alt, width, height, className, ...rest }: SpriteProps) {
   return (
     <Image
+      draggable={false}
       className={cn("block w-full pixelated", className)}
       height={height ?? 100}
       width={width ?? 64}

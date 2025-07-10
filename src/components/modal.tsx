@@ -7,9 +7,15 @@ import { useEffect, useState } from "react";
 export type ModalProps = React.PropsWithChildren & {
   isOpen: boolean;
   onClose: () => void;
+  className?: string;
 };
 
-export default function Modal({ isOpen, onClose, children }: ModalProps) {
+export default function Modal({
+  isOpen,
+  onClose,
+  children,
+  className,
+}: ModalProps) {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -35,6 +41,7 @@ export default function Modal({ isOpen, onClose, children }: ModalProps) {
           onClick={onClose}
         >
           <motion.div
+            className={className}
             initial={{ y: 100, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             exit={{ opacity: 0 }}

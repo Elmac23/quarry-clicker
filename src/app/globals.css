@@ -1,27 +1,35 @@
 @import "tailwindcss";
 @import "tw-animate-css";
-@layer utilities {
-  .pixelated {
-    image-rendering: -moz-crisp-edges;
-    image-rendering: -webkit-crisp-edges;
-    image-rendering: pixelated;
-    image-rendering: crisp-edges;
-  }
 
-  .grid-center {
-    display: grid;
-    place-items: center;
-  }
+@utility pixelated {
+  image-rendering: -moz-crisp-edges;
+  image-rendering: -webkit-crisp-edges;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
 
-  .pixelated-sans {
-    font-family: "Pixelify Sans", sans-serif;
-  }
+@utility grid-center {
+  display: grid;
+  place-items: center;
+}
+
+@utility jersey10 {
+  font-family: "Jersey 10", sans-serif;
 }
 
 @theme {
   --color-primary-500: #e6b231;
   --color-secondary-500: #3845b8;
   --color-secondary-800: #1c2154;
+  --color-brown-100: #f4e4c1;
+  --color-brown-200: #e8c77d;
+  --color-brown-300: #d4a574;
+  --color-brown-400: #c49464;
+  --color-brown-500: #cd7f32;
+  --color-brown-600: #b8733a;
+  --color-brown-700: #a0622f;
+  --color-brown-800: #8b5a2b;
+  --color-brown-900: #654321;
 }
 
 /* Custom scrollbar styling - pixel art theme */

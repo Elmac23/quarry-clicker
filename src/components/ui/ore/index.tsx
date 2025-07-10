@@ -5,6 +5,8 @@ import { useComputeChance } from "@/hooks/useComputeChance";
 import { chancesFromMine } from "@/lib/chancesFromMine";
 import { addItem } from "@/store/inventory";
 import { dealDamage, resetHealth } from "@/store/mine";
+import { addNotification } from "@/store/notification";
+import { incrementStat } from "@/store/stats";
 import React from "react";
 
 function Ore() {
@@ -19,15 +21,24 @@ function Ore() {
     const newHealth = health - damage;
 
     dispatch(dealDamage(damage));
+    dispatch(incrementStat("totalClicks"));
 
     if (newHealth <= 0) {
+      const item = getDrop();
       dispatch(resetHealth());
       dispatch(
         addItem({
           amount: 1,
-          item: getDrop(),
+          item,
         })
       );
+      dispatch(
+        addNotification({
+          amount: 1,
+          itemId: item,
+        })
+      );
+      dispatch(incrementStat("totalMined"));
     }
   };
 

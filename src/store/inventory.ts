@@ -33,7 +33,6 @@ export const inventorySlice = createSlice({
   initialState,
   reducers: {
     deleteItemAtIndex(state, action: PayloadAction<number>) {
-      console.log(action.payload);
       state.items[action.payload] = null;
       return state;
     },

@@ -1,6 +1,6 @@
 "use client";
 
-import Button from "@/components/button";
+import Button from "@/components/Button";
 import BottomMenu from "@/components/ui/menu";
 import Ore from "@/components/ui/ore";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";

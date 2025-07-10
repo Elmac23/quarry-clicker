@@ -2,7 +2,7 @@
 
 import { useAppSelector } from "@/hooks/redux";
 import React, { useMemo } from "react";
-import Notification from "./notification";
+import Notification from "./Notification";
 import { AnimatePresence } from "motion/react";
 
 function Notifiactions() {

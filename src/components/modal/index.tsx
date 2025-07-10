@@ -4,16 +4,16 @@ import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "motion/react";
 import { useEffect, useState } from "react";
 
-export type ModalProps = React.PropsWithChildren & {
+export type ModalProps = React.ComponentProps<"div"> & {
   isOpen: boolean;
   onClose: () => void;
-  className?: string;
 };
 
 export default function Modal({
   isOpen,
   onClose,
   children,
+  style,
   className,
 }: ModalProps) {
   const [mounted, setMounted] = useState(false);
@@ -41,6 +41,7 @@ export default function Modal({
           onClick={onClose}
         >
           <motion.div
+            style={style}
             className={className}
             initial={{ y: 100, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}

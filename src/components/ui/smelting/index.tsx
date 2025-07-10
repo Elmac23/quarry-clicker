@@ -1,6 +1,6 @@
 "use client";
 
-import Button from "@/components/button";
+import Button from "@/components/Button";
 import Modal, { ModalProps } from "@/components/modal";
 
 type SmeltingModalProps = Pick<ModalProps, "isOpen" | "onClose">;

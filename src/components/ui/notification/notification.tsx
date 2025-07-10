@@ -5,7 +5,7 @@ import React from "react";
 import type { NotificationWithTimer } from "@/store/notification";
 import { useAppDispatch } from "@/hooks/redux";
 import { useInterval } from "@/hooks/useInterval";
-import ItemTile from "@/components/itemTile";
+import ItemTile from "@/components/ItemTile";
 import { ITEMS } from "@/data/items";
 import { motion } from "motion/react";
 
@@ -39,8 +39,12 @@ function Notification({ data }: NotificationProps) {
       }}
       onClick={() => dispatch(removeNotification(data.itemId))}
     >
-      <div className="flex-shrink-0">
-        <ItemTile itemId={data.itemId} quantity={data.amount} />
+      <div className="flex-shrink-0 h-full">
+        <ItemTile
+          className="w-18"
+          itemId={data.itemId}
+          quantity={data.amount}
+        />
       </div>
       <p className="jersey10 text-3xl grow text-center break-words leading-tight">
         {data.customMessage ?? ITEMS[data.itemId].name}

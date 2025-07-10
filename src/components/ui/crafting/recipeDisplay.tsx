@@ -1,5 +1,5 @@
-import ItemTile from "@/components/itemTile";
-import Sprite from "@/components/sprite";
+import ItemTile from "@/components/ItemTile";
+import Sprite from "@/components/Sprite";
 import { RecipeWithAnnotations } from "@/hooks/useCrafting";
 import { motion } from "motion/react";
 import React from "react";
@@ -24,37 +24,42 @@ function RecipeDisplay({ recipe }: RecipeDisplayProps) {
         duration: 0.2,
         ease: "easeInOut",
       }}
-      className="flex px-4 pb-2 mb-2 gap-2 h-22 items-center"
+      className="flex px-4 pb-2 mb-2 gap-2 min-h-20 border-b-2 border-green-950/80 items-center"
     >
-      <ul className="grow flex justify-around h-full items-center">
+      <ul className="grow flex flex-wrap justify-around min-h-20 items-center">
         {recipe.ingerdients.map(
           ({ item, quantity, isSatisfied, totalItemInInventory }, index) => {
             return (
-              <li key={index}>
+              <li key={index} className="min-h-16">
                 <ItemTile
                   itemId={item}
                   quantity={quantity}
                   counter={totalItemInInventory}
+                  className="min-h-18"
                   background={!isSatisfied ? "danger" : "standard"}
-                  className="h-full"
                 />
               </li>
             );
           }
         )}
-        <li className="grid-center">
-          <Sprite className="w-16" alt="arrow" src="/sprites/ui/ArrowYes.png" />
-        </li>
       </ul>
-      <ItemTile
-        quantity={recipe.result.quantity}
-        itemId={recipe.result.item}
-        onClick={() => {
-          if (recipe.canCraft) recipe.craft();
-          else return;
-        }}
-        background={!recipe.canCraft ? "danger" : "standard"}
-      />
+      <div className="flex h-full">
+        <Sprite
+          className="w-16 mr-2"
+          alt="arrow"
+          src="/sprites/ui/ArrowYes.png"
+        />
+        <ItemTile
+          quantity={recipe.result.quantity}
+          itemId={recipe.result.item}
+          className="min-h-18"
+          onClick={() => {
+            if (recipe.canCraft) recipe.craft();
+            else return;
+          }}
+          background={!recipe.canCraft ? "danger" : "standard"}
+        />
+      </div>
     </motion.div>
   );
 }

@@ -2,10 +2,10 @@ import { ItemKey, ITEMS } from "@/data/items";
 import { cn } from "@/lib/utils";
 import { cva, VariantProps } from "class-variance-authority";
 import React from "react";
-import Sprite from "./sprite";
+import Sprite from "./Sprite";
 
 const itemTileVariants = cva(
-  "bg-cover aspect-square pixelated md:w-full md:size-20 size-16 grid-center cursor-pointer relative transition",
+  "bg-cover aspect-square pixelated grid-center cursor-pointer relative transition",
   {
     variants: {
       background: {
@@ -39,11 +39,11 @@ function ItemTile({
   ...rest
 }: ItemTileProps) {
   return (
-    <div className={cn(itemTileVariants({ background, className }))} {...rest}>
+    <div className={cn(itemTileVariants({ background }), className)} {...rest}>
       {itemId && (
         <>
           <Sprite
-            className="size-12 md:size-18"
+            className="aspect-square w-14/15"
             alt={ITEMS[itemId].name}
             src={ITEMS[itemId].icon}
           />

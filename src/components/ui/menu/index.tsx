@@ -1,7 +1,7 @@
 import React from "react";
-import Sprite from "../../sprite";
-import MenuButton from "./menuButton";
-import ModalContainer from "./modalContainer";
+import Sprite from "../../Sprite";
+import MenuButton from "./MenuButton";
+import ModalContainer from "./ModalContainer";
 import { useAppSelector } from "@/hooks/redux";
 
 function BottomMenu() {

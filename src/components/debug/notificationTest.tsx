@@ -3,7 +3,7 @@
 import { ITEMS } from "@/data/items";
 import { addNotification } from "@/store/notification";
 import React from "react";
-import Button from "../button";
+import Button from "../Button";
 import { useAppDispatch } from "@/hooks/redux";
 
 function NotificationTest() {

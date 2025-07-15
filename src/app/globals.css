@@ -13,8 +13,16 @@
   place-items: center;
 }
 
+@utility grid-fluid-sm {
+  grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+}
+
 @utility grid-fluid {
-  grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+}
+
+@utility grid-fluid-lg {
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
 }
 
 @utility jersey10 {

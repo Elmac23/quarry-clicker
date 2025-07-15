@@ -1,13 +1,17 @@
 import { Recipe, RECIPES } from "@/data/recipes";
-import { useAppDispatch, useAppSelector } from "./redux";
-import { ItemKey, ITEMS } from "@/data/items";
-import { addItem, removeItem } from "@/store/inventory";
+import { useAppDispatch } from "./redux";
+import { ItemKey, ItemPickaxeKey, ITEMS } from "@/data/items";
+import {
+  addItem,
+  removeItem,
+  activeItem,
+  useInventory,
+} from "@/store/inventory";
 import { useMemo } from "react";
-import { addNotification } from "@/store/notification";
 import { incrementStat } from "@/store/stats";
 
 export function useCrafting() {
-  const { items } = useAppSelector((state) => state.inventory);
+  const { items } = useInventory();
   const dispatch = useAppDispatch();
 
   const recipesWithAnnotations = useMemo(() => {
@@ -33,7 +37,7 @@ export function useCrafting() {
       });
 
       if (
-        ITEMS[result].type === "tool" &&
+        ITEMS[result].type === "pickaxe" &&
         items.some((item) => item?.id === result)
       )
         canCraft = false;
@@ -46,12 +50,8 @@ export function useCrafting() {
           });
           dispatch(addItem({ amount: quantity, item: result }));
           dispatch(incrementStat("totalCrafted"));
-          dispatch(
-            addNotification({
-              amount: quantity,
-              itemId: result,
-            })
-          );
+          if (ITEMS[result].type === "pickaxe")
+            dispatch(activeItem(result as ItemPickaxeKey));
         },
         ingerdients,
         result: { quantity, item: result },

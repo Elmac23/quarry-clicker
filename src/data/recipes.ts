@@ -11,167 +11,200 @@ export type Recipe = {
 };
 
 export const RECIPES = {
-  amethyst: {
-    quantity: 1,
-    recipe: [
-      { item: "coal", quantity: 5 },
-      { item: "stone", quantity: 10 },
-    ],
-  },
   stonePickaxe: {
     quantity: 1,
-    recipe: [{ item: "stone", quantity: 15 }],
+    recipe: [
+      { item: "stone", quantity: 15 },
+      { item: "woodenPickaxe", quantity: 1 },
+    ],
   },
-  // Basic tool recipes
   tinPickaxe: {
     quantity: 1,
     recipe: [
-      { item: "tinBar", quantity: 3 },
-      { item: "stone", quantity: 5 },
+      {
+        item: "tinBar",
+        quantity: 15,
+      },
+      { item: "stonePickaxe", quantity: 1 },
     ],
   },
   copperPickaxe: {
     quantity: 1,
     recipe: [
-      { item: "copperBar", quantity: 3 },
-      { item: "stone", quantity: 5 },
+      {
+        item: "tinBar",
+        quantity: 20,
+      },
+      { item: "tinPickaxe", quantity: 1 },
+    ],
+  },
+  bronzePickaxe: {
+    quantity: 1,
+    recipe: [
+      {
+        item: "bronzeBar",
+        quantity: 25,
+      },
+      { item: "copperPickaxe", quantity: 1 },
+    ],
+  },
+  leadPickaxe: {
+    quantity: 1,
+    recipe: [
+      {
+        item: "leadBar",
+        quantity: 25,
+      },
+      { item: "bronzePickaxe", quantity: 1 },
     ],
   },
   ironPickaxe: {
     quantity: 1,
     recipe: [
-      { item: "ironBar", quantity: 3 },
-      { item: "coal", quantity: 2 },
+      {
+        item: "ironBar",
+        quantity: 25,
+      },
+      { item: "leadPickaxe", quantity: 1 },
+      { item: "amethyst", quantity: 1 },
     ],
   },
-  // Bar smelting recipes
-  tinBar: {
+  steelPickaxe: {
     quantity: 1,
     recipe: [
-      { item: "tinOre", quantity: 2 },
-      { item: "coal", quantity: 1 },
+      {
+        item: "steelBar",
+        quantity: 25,
+      },
+      { item: "ironPickaxe", quantity: 1 },
+      { item: "emerald", quantity: 1 },
     ],
   },
-  copperBar: {
+  aluminiumPickaxe: {
     quantity: 1,
     recipe: [
-      { item: "copperOre", quantity: 2 },
-      { item: "coal", quantity: 1 },
+      {
+        item: "aluminiumBar",
+        quantity: 30,
+      },
+      { item: "steelPickaxe", quantity: 1 },
+      { item: "topaz", quantity: 1 },
     ],
   },
-  bronzeBar: {
+  silverPickaxe: {
     quantity: 1,
     recipe: [
-      { item: "tinBar", quantity: 1 },
-      { item: "copperBar", quantity: 1 },
+      {
+        item: "silverBar",
+        quantity: 30,
+      },
+      { item: "aluminiumPickaxe", quantity: 1 },
+      { item: "ruby", quantity: 1 },
+      { item: "steelBar", quantity: 5 },
     ],
   },
-  ironBar: {
+  goldenPickaxe: {
     quantity: 1,
     recipe: [
-      { item: "ironOre", quantity: 3 },
-      { item: "coal", quantity: 2 },
+      {
+        item: "goldenBar",
+        quantity: 35,
+      },
+      { item: "silverPickaxe", quantity: 1 },
+      { item: "opal", quantity: 1 },
+      { item: "steelBar", quantity: 5 },
     ],
   },
-  steelBar: {
+  platinumPickaxe: {
     quantity: 1,
     recipe: [
-      { item: "ironBar", quantity: 2 },
-      { item: "coal", quantity: 3 },
-    ],
-  },
-  silverBar: {
-    quantity: 1,
-    recipe: [
-      { item: "silverOre", quantity: 3 },
-      { item: "coal", quantity: 2 },
-    ],
-  },
-  goldenBar: {
-    quantity: 1,
-    recipe: [
-      { item: "goldOre", quantity: 4 },
-      { item: "coal", quantity: 3 },
-    ],
-  },
-  // Glass making
-  glass: {
-    quantity: 2,
-    recipe: [
-      { item: "sand", quantity: 5 },
-      { item: "coal", quantity: 1 },
-    ],
-  },
-  // Special items
-  gear: {
-    quantity: 1,
-    recipe: [
-      { item: "ironBar", quantity: 2 },
-      { item: "copperBar", quantity: 1 },
-    ],
-  },
-  wire: {
-    quantity: 3,
-    recipe: [{ item: "copperBar", quantity: 1 }],
-  },
-  torch: {
-    quantity: 2,
-    recipe: [
-      { item: "stone", quantity: 1 },
-      { item: "coal", quantity: 1 },
-    ],
-  },
-  // Advanced recipes
-  combinerAlpha: {
-    quantity: 1,
-    recipe: [
-      { item: "gear", quantity: 2 },
-      { item: "wire", quantity: 3 },
-      { item: "ironBar", quantity: 5 },
-    ],
-  },
-  combinerBeta: {
-    quantity: 1,
-    recipe: [
-      { item: "combinerAlpha", quantity: 1 },
-      { item: "goldenBar", quantity: 2 },
+      {
+        item: "platinumBar",
+        quantity: 35,
+      },
+      { item: "goldenPickaxe", quantity: 1 },
       { item: "diamond", quantity: 1 },
+      { item: "steelBar", quantity: 5 },
     ],
   },
-  flashlight: {
-    quantity: 1,
-    recipe: [
-      { item: "wire", quantity: 2 },
-      { item: "gear", quantity: 1 },
-      { item: "glass", quantity: 1 },
-    ],
-  },
-  emerald: {
-    quantity: 10,
-    recipe: [
-      {
-        item: "amethyst",
-        quantity: 5,
-      },
-      {
-        item: "opal",
-        quantity: 5,
-      },
-    ],
-  },
-  food: {
+  emptyBottle: {
     quantity: 1,
     recipe: [
       {
-        item: "ruby",
+        item: "glass",
+        quantity: 6,
+      },
+    ],
+  },
+  greaterEmptyBottle: {
+    quantity: 1,
+    recipe: [
+      {
+        item: "glass",
+        quantity: 12,
+      },
+      {
+        item: "silverBar",
+        quantity: 2,
+      },
+    ],
+  },
+  wrathPotion: {
+    quantity: 1,
+    recipe: [
+      {
+        item: "emptyBottle",
         quantity: 1,
       },
       {
-        item: "amethyst",
+        item: "stone",
         quantity: 1,
+      },
+    ],
+  },
+  greedPotion: {
+    quantity: 1,
+    recipe: [
+      {
+        item: "emptyBottle",
+        quantity: 1,
+      },
+      {
+        item: "goldenBar",
+        quantity: 2,
       },
       {
         item: "emerald",
+        quantity: 1,
+      },
+    ],
+  },
+  fortunePotion: {
+    quantity: 1,
+    recipe: [
+      {
+        item: "emptyBottle",
+        quantity: 1,
+      },
+      {
+        item: "amethyst",
+        quantity: 2,
+      },
+      {
+        item: "silverBar",
+        quantity: 1,
+      },
+    ],
+  },
+  luckPotion: {
+    quantity: 1,
+    recipe: [
+      {
+        item: "emptyBottle",
+        quantity: 1,
+      },
+      {
+        item: "ruby",
         quantity: 1,
       },
       {
@@ -179,16 +212,50 @@ export const RECIPES = {
         quantity: 1,
       },
       {
+        item: "copperBar",
+        quantity: 3,
+      },
+    ],
+  },
+  monsterPotion: {
+    quantity: 1,
+    recipe: [
+      {
+        item: "emptyBottle",
+        quantity: 1,
+      },
+      {
+        item: "batwing",
+        quantity: 5,
+      },
+      {
         item: "diamond",
         quantity: 1,
       },
       {
-        item: "sapphire",
+        item: "ironBar",
+        quantity: 2,
+      },
+    ],
+  },
+  smeltingPotion: {
+    quantity: 1,
+    recipe: [
+      {
+        item: "emptyBottle",
         quantity: 1,
       },
       {
-        item: "opal",
-        quantity: 1,
+        item: "coal",
+        quantity: 10,
+      },
+      {
+        item: "gear",
+        quantity: 2,
+      },
+      {
+        item: "tinBar",
+        quantity: 3,
       },
     ],
   },

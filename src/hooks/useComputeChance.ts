@@ -5,7 +5,7 @@ export type ChanceEntity<T> = {
   data: T;
 };
 
-export function useComputeChance<T>(
+export function computeChance<T>(
   entities: ChanceEntity<T>[],
   standard: T,
   base: number = 100

@@ -1,54 +1,94 @@
 import ItemTile from "@/components/ItemTile";
-import { ItemKey, ITEMS, ItemToolKey } from "@/data/items";
-import { useAppDispatch, useAppSelector } from "@/hooks/redux";
-import {
-  deleteItemAtIndex,
-  ItemWithQuantity,
-  selectPickaxe,
-} from "@/store/inventory";
-import { motion } from "motion/react";
-import { SetStateAction } from "react";
+import { ActiveItemKey, ItemKey, ItemPickaxeKey, ITEMS } from "@/data/items";
+import { useAppDispatch } from "@/hooks/redux";
+
+import { activeItem, ItemWithQuantity } from "@/store/inventory";
+import React, { useState } from "react";
+import { SetStateAction, useCallback } from "react";
+import DraggableWrapper from "./DraggableWrapper";
+import { useToggle } from "@/hooks/useToggle";
+import ContextMenu from "@/components/contextMenu";
+import Button from "@/components/Button";
+import { isActiveItem } from "@/lib/isActiveItem";
 
 type InventoryItemProps = {
   item: ItemWithQuantity | null;
   index: number;
+  selectedPickaxe: ItemPickaxeKey;
   setSelectedItem: React.Dispatch<SetStateAction<ItemKey | null>>;
 };
 
-function InventoryItem({ item, index, setSelectedItem }: InventoryItemProps) {
+function InventoryItem({
+  item,
+  index,
+  setSelectedItem,
+  selectedPickaxe,
+}: InventoryItemProps) {
   const dispatch = useAppDispatch();
-  const { selectedPickaxe } = useAppSelector((state) => state.inventory);
-  if (!item) return <ItemTile />;
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const { value, setFalse, setTrue } = useToggle(false);
 
-  const isTool = ITEMS[item.id].type === "tool";
+  const handleMouseEnter = useCallback(() => {
+    if (item) setSelectedItem(item.id);
+  }, [item, setSelectedItem]);
+
+  const handleContextMenu = useCallback(
+    (e: React.MouseEvent) => {
+      e.preventDefault();
+      setTrue();
+      setPosition({
+        x: e.clientX,
+        y: e.clientY,
+      });
+    },
+    [setTrue]
+  );
 
   return (
-    <motion.li
-      whileHover={{
-        scale: 1.05,
-      }}
-      key={index}
-    >
-      <ItemTile
-        quantity={item.quantity}
-        itemId={item.id}
-        background={item.id === selectedPickaxe ? "selected" : undefined}
-        onMouseEnter={() => {
-          setSelectedItem(item.id);
-        }}
-        onClick={
-          isTool
-            ? () =>
-                dispatch(
-                  selectPickaxe({
-                    pickaxe: item.id as ItemToolKey,
-                  })
-                )
-            : () => dispatch(deleteItemAtIndex(index))
-        }
-      />
-    </motion.li>
+    <DraggableWrapper id={index} disabled={!item}>
+      {(containerProps) => (
+        <>
+          <ItemTile
+            containerProps={containerProps}
+            onContextMenu={item ? handleContextMenu : undefined}
+            quantity={item?.quantity}
+            itemId={item?.id}
+            background={item?.id === selectedPickaxe ? "selected" : undefined}
+            onMouseEnter={handleMouseEnter}
+          />
+          {item && (
+            <ContextMenu
+              position={position}
+              isOpen={value}
+              onClose={setFalse}
+              className="bg-green-900/80 p-4 border-[10] pixelated rounded-2xl"
+            >
+              <div className="space-y-4">
+                <p className="text-primary-500 pixelated jersey10 text-2xl mb-4">
+                  {ITEMS[item.id!].name}
+                </p>
+                {isActiveItem(item.id) && (
+                  <Button
+                    className="w-full"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      dispatch(activeItem(item.id as ActiveItemKey));
+                      setFalse();
+                    }}
+                  >
+                    Use
+                  </Button>
+                )}
+                <Button className="w-full" onClick={(e) => e.stopPropagation()}>
+                  Sell
+                </Button>
+              </div>
+            </ContextMenu>
+          )}
+        </>
+      )}
+    </DraggableWrapper>
   );
 }
 
-export default InventoryItem;
+export default React.memo(InventoryItem);

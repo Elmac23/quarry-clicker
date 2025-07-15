@@ -37,7 +37,7 @@ export default function Modal({
           exit={{
             opacity: 0,
           }}
-          className="bg-black/80 backdrop-blur-md w-screen h-screen fixed inset-0 grid place-items-center"
+          className="bg-black/80 backdrop-blur-sm w-screen h-screen fixed inset-0 grid place-items-center"
           onClick={onClose}
         >
           <motion.div

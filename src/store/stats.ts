@@ -1,5 +1,8 @@
+import { useAppSelector } from "@/hooks/redux";
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
+import { dealDamage, resetHealth } from "./mine";
+import { speedUp } from "./smelt";
 
 interface StatisticsState {
   totalClicks: number;
@@ -20,6 +23,21 @@ const initialState: StatisticsState = {
 export const statisticsSlice = createSlice({
   name: "statistics",
   initialState,
+
+  extraReducers: (builder) => {
+    builder.addCase(dealDamage, (state) => {
+      state.totalClicks++;
+    });
+
+    builder.addCase(resetHealth, (state) => {
+      state.totalMined++;
+    });
+
+    builder.addCase(speedUp, (state) => {
+      state.totalClicks++;
+    });
+  },
+
   reducers: {
     updateStat(
       state,
@@ -36,5 +54,7 @@ export const statisticsSlice = createSlice({
 });
 
 export const { updateStat, incrementStat } = statisticsSlice.actions;
+
+export const useStatistics = () => useAppSelector((state) => state.statistics);
 
 export default statisticsSlice.reducer;

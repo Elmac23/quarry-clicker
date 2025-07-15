@@ -2,10 +2,11 @@ import React from "react";
 import Sprite from "../../Sprite";
 import MenuButton from "./MenuButton";
 import ModalContainer from "./ModalContainer";
-import { useAppSelector } from "@/hooks/redux";
+
+import { useModal } from "@/store/modal";
 
 function BottomMenu() {
-  const { modalId } = useAppSelector((state) => state.modal);
+  const { modalId } = useModal();
   return (
     <>
       <nav className="flex gap-2 fixed left-[50%] translate-[-50%] bottom-4 z-20">
@@ -19,12 +20,15 @@ function BottomMenu() {
           <Sprite src="/sprites/ui/FireIcon.png" alt="smelting button" />
         </MenuButton>
         <MenuButton modalId={3} isActive={3 === modalId}>
-          <Sprite src="/sprites/ui/WatercanIcon.png" alt="garden button" />
+          <Sprite src="/sprites/ui/MinecartIcon.png" alt="mines button" />
         </MenuButton>
         <MenuButton modalId={4} isActive={4 === modalId}>
-          <Sprite src="/sprites/ui/QuestIcon.png" alt="quests button" />
+          <Sprite src="/sprites/ui/WatercanIcon.png" alt="garden button" />
         </MenuButton>
         <MenuButton modalId={5} isActive={5 === modalId}>
+          <Sprite src="/sprites/ui/QuestIcon.png" alt="quests button" />
+        </MenuButton>
+        <MenuButton modalId={6} isActive={6 === modalId}>
           <Sprite src="/sprites/ui/GearIcon.png" alt="settings button" />
         </MenuButton>
       </nav>

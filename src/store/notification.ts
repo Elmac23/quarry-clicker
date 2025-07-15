@@ -1,6 +1,8 @@
 import { ItemKey } from "@/data/items";
+import { useAppSelector } from "@/hooks/redux";
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
+import { addItem } from "./inventory";
 
 export type Notification = {
   itemId: ItemKey;
@@ -23,6 +25,29 @@ const initialState: NotificationState = {
 export const notificationSlice = createSlice({
   name: "notification",
   initialState,
+
+  extraReducers: (builder) => {
+    builder.addCase(addItem, (state, action) => {
+      const existingNotification = state.notifications.find(
+        (el) => el.itemId === action.payload.item
+      );
+
+      if (!existingNotification) {
+        state.notifications.push({
+          amount: action.payload.amount,
+          itemId: action.payload.item,
+          timer: 2,
+        });
+        return state;
+      }
+
+      existingNotification.amount += action.payload.amount;
+      existingNotification.timer = 2;
+
+      return state;
+    });
+  },
+
   reducers: {
     tick(state, action: PayloadAction<string>) {
       const target = state.notifications.find(
@@ -68,5 +93,8 @@ export const notificationSlice = createSlice({
 
 export const { addNotification, removeNotification, tick } =
   notificationSlice.actions;
+
+export const useNotification = () =>
+  useAppSelector((state) => state.notification);
 
 export default notificationSlice.reducer;

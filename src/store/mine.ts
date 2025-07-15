@@ -1,13 +1,14 @@
 import { MineKey, MINES } from "@/data/mines";
+import { useAppSelector } from "@/hooks/redux";
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
-interface InventoryState {
+interface MineState {
   mine: MineKey;
   health: number;
 }
 
-const initialState: InventoryState = {
+const initialState: MineState = {
   mine: "coalMine",
   health: MINES["coalMine"].health,
 };
@@ -33,5 +34,7 @@ export const mineSlice = createSlice({
 });
 
 export const { changeMine, dealDamage, resetHealth } = mineSlice.actions;
+
+export const useMine = () => useAppSelector((state) => state.mine);
 
 export default mineSlice.reducer;

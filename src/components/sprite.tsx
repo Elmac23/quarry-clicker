@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/cn";
 import Image from "next/image";
 import React from "react";
 
@@ -8,7 +8,7 @@ function Sprite({ alt, width, height, className, ...rest }: SpriteProps) {
   return (
     <Image
       draggable={false}
-      className={cn("block w-full pixelated", className)}
+      className={cn("block w-full pixelated select-none", className)}
       height={height ?? 100}
       width={width ?? 64}
       unoptimized

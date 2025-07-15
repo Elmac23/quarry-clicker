@@ -1,14 +1,14 @@
 import { ModalProps } from "@/components/modal";
 import SettingsParagraph from "./SettingsParagraph";
 import StatPosition from "./StatPosition";
-import { useAppSelector } from "@/hooks/redux";
 import UIModal from "@/components/modal/UIModal";
+import { useStatistics } from "@/store/stats";
 
 type SettingsModalProps = Pick<ModalProps, "isOpen" | "onClose">;
 
 function SettingsAndStats({ isOpen, onClose }: SettingsModalProps) {
   const { totalClicks, totalCrafted, totalSmelted, totalMined } =
-    useAppSelector((state) => state.statistics);
+    useStatistics();
   return (
     <UIModal isOpen={isOpen} onClose={onClose}>
       <div className="flex flex-col gap-4">

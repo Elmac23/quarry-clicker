@@ -3,15 +3,16 @@ import Button from "@/components/Button";
 import Modal, { ModalProps } from "@/components/modal/index";
 
 import { cva, VariantProps } from "class-variance-authority";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/cn";
 
 const uiModalVariants = cva(
-  "p-8 z-10 bg-secondary-800/70 pixelated border-16 rounded-4xl w-[70%] min-w-md max-w-3xl",
+  "p-8 z-10 bg-secondary-800/70 pixelated border-16 rounded-4xl w-full md:w-[70%] max-w-3xl",
   {
     variants: {
       bg: {
         default: "bg-secondary-800/70",
         green: "bg-green-950/70",
+        gray: "bg-gray-800/70",
       },
     },
     defaultVariants: {

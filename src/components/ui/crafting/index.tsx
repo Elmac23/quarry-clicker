@@ -3,12 +3,13 @@ import { ModalProps } from "@/components/modal/";
 import { AnimatePresence } from "motion/react";
 import { RecipeWithAnnotations, useCrafting } from "@/hooks/useCrafting";
 import RecipeDisplay from "@/components/ui/crafting/RecipeDisplay";
-import { useAppSelector } from "@/hooks/redux";
 import { ITEMS } from "@/data/items";
 import UIModal from "@/components/modal/UIModal";
 import ItemGrid from "../ItemGrid";
 import ModalHeader from "@/components/modal/ModalHeader";
 import CraftingItem from "./CraftingItem";
+import { useInventory } from "@/store/inventory";
+import ModalSecondaryText from "@/components/modal/ModalSecondaryText";
 
 type CraftingModalProps = Pick<ModalProps, "isOpen" | "onClose">;
 
@@ -18,7 +19,7 @@ function Crafting({ isOpen, onClose }: CraftingModalProps) {
 
   const [recipeIndex, setRecipeIndex] = useState(-1);
 
-  const { items } = useAppSelector((state) => state.inventory);
+  const { items } = useInventory();
 
   const recipes = useCrafting();
   useEffect(() => {
@@ -32,13 +33,17 @@ function Crafting({ isOpen, onClose }: CraftingModalProps) {
       <ModalHeader>
         Crafting {selectedItem && `| ${ITEMS[selectedItem.result.item].name}`}
       </ModalHeader>
+      <ModalSecondaryText>
+        {selectedItem && ITEMS[selectedItem.result.item].description}
+      </ModalSecondaryText>
       <AnimatePresence mode="wait">
         {selectedItem && (
           <RecipeDisplay key={recipeIndex} recipe={selectedItem} />
         )}
       </AnimatePresence>
-      <ItemGrid>
-        {recipes.map((recipe: RecipeWithAnnotations, index) => (
+      <ItemGrid
+        data={recipes}
+        renderItem={(recipe, index) => (
           <CraftingItem
             index={index}
             key={index}
@@ -47,8 +52,8 @@ function Crafting({ isOpen, onClose }: CraftingModalProps) {
             setRecipeIndex={setRecipeIndex}
             setSelectedItem={setSelectedItem}
           />
-        ))}
-      </ItemGrid>
+        )}
+      ></ItemGrid>
     </UIModal>
   );
 }

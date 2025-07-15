@@ -32,7 +32,7 @@ function Notification({ data }: NotificationProps) {
         y: 0,
         opacity: 1,
       }}
-      className="flex items-center pl-2 bg-secondary-800 text-primary-500 px-4 py-2 border-16 pixelated rounded-2xl gap-x-3  max-w-96 ml-auto min-w-64 cursor-pointer"
+      className="flex items-center pl-2 bg-secondary-800 text-primary-500 px-4 py-2 border-8 md:border-16 pixelated rounded-2xl gap-x-3 md:max-w-96 ml-auto md:min-w-64 cursor-pointer"
       style={{
         borderImage: "url('/sprites/ui/frame.png') 7",
         borderImageRepeat: "round",
@@ -41,12 +41,12 @@ function Notification({ data }: NotificationProps) {
     >
       <div className="flex-shrink-0 h-full">
         <ItemTile
-          className="w-18"
+          className="w-14 md:w-18"
           itemId={data.itemId}
           quantity={data.amount}
         />
       </div>
-      <p className="jersey10 text-3xl grow text-center break-words leading-tight">
+      <p className="jersey10 text-xl md:text-3xl grow text-center break-words leading-tight">
         {data.customMessage ?? ITEMS[data.itemId].name}
       </p>
     </motion.li>

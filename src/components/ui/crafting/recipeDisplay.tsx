@@ -24,18 +24,18 @@ function RecipeDisplay({ recipe }: RecipeDisplayProps) {
         duration: 0.2,
         ease: "easeInOut",
       }}
-      className="flex px-4 pb-2 mb-2 gap-2 min-h-20 border-b-2 border-green-950/80 items-center"
+      className="flex flex-col sm:flex-row px-2 sm:px-4 pb-2 mb-2 gap-2 sm:gap-3 md:gap-4 min-h-20 sm:min-h-16 md:min-h-20 border-b-4 border-b-black/10 items-center"
     >
-      <ul className="grow flex flex-wrap justify-around min-h-20 items-center">
+      <ul className="w-full sm:grow flex flex-wrap justify-center sm:justify-around gap-1 sm:gap-2 min-h-16 sm:min-h-12 md:min-h-20 items-center">
         {recipe.ingerdients.map(
           ({ item, quantity, isSatisfied, totalItemInInventory }, index) => {
             return (
-              <li key={index} className="min-h-16">
+              <li key={index} className="min-h-12 sm:min-h-14 md:min-h-16">
                 <ItemTile
                   itemId={item}
                   quantity={quantity}
                   counter={totalItemInInventory}
-                  className="min-h-18"
+                  className="min-h-14 md:min-h-18"
                   background={!isSatisfied ? "danger" : "standard"}
                 />
               </li>
@@ -43,16 +43,17 @@ function RecipeDisplay({ recipe }: RecipeDisplayProps) {
           }
         )}
       </ul>
-      <div className="flex h-full">
+      <div className="flex items-center justify-center sm:h-full gap-2">
         <Sprite
-          className="w-16 mr-2"
+          className="sm:block hidden h-16"
           alt="arrow"
           src="/sprites/ui/ArrowYes.png"
         />
+        <p className="sm:hidden jersey10 text-primary-500 text-2xl">Result: </p>
         <ItemTile
           quantity={recipe.result.quantity}
           itemId={recipe.result.item}
-          className="min-h-18"
+          className="min-h-14 md:min-h-18"
           onClick={() => {
             if (recipe.canCraft) recipe.craft();
             else return;

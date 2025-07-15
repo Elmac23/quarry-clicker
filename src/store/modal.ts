@@ -1,3 +1,4 @@
+import { useAppSelector } from "@/hooks/redux";
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
@@ -24,5 +25,7 @@ export const modalSlice = createSlice({
 });
 
 export const { setModal, close } = modalSlice.actions;
+
+export const useModal = () => useAppSelector((state) => state.modal);
 
 export default modalSlice.reducer;

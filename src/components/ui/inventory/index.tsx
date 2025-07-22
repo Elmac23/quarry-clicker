@@ -1,14 +1,13 @@
 "use client";
 
-import { ItemKey, ITEMS } from "@/data/items";
+import { ItemKey, ITEMS, TypedItemWithQuantity } from "@/data/items";
 
 import React, { useRef, useState, useCallback, useMemo } from "react";
 import { ModalProps } from "@/components/modal";
-import ModalHeader from "@/components/modal/ModalHeader";
 import UIModal from "@/components/modal/UIModal";
 import ItemGrid from "../ItemGrid";
 import InventoryItem from "./InventoryItem";
-import { ItemWithQuantity, swapItems, useInventory } from "@/store/inventory";
+import { swapItems, useInventory } from "@/store/inventory";
 import {
   DndContext,
   DragEndEvent,
@@ -18,7 +17,7 @@ import {
   useSensors,
 } from "@dnd-kit/core";
 import { useAppDispatch } from "@/hooks/redux";
-import ModalSecondaryText from "@/components/modal/ModalSecondaryText";
+import Text from "@/components/Text";
 
 type InventoryModalProps = Pick<ModalProps, "isOpen" | "onClose">;
 function Inventory({ isOpen, onClose }: InventoryModalProps) {
@@ -50,7 +49,7 @@ function Inventory({ isOpen, onClose }: InventoryModalProps) {
   );
 
   const renderItem = useCallback(
-    (item: ItemWithQuantity | null, index: number) => (
+    (item: TypedItemWithQuantity | null, index: number) => (
       <InventoryItem
         selectedPickaxe={selectedPickaxe}
         index={index}
@@ -72,12 +71,10 @@ function Inventory({ isOpen, onClose }: InventoryModalProps) {
         borderImageRepeat: "round",
       }}
     >
-      <ModalHeader>
+      <Text size="xl" color="primary">
         Inventory {selectedItem && `| ${ITEMS[selectedItem].name}`}
-      </ModalHeader>
-      <ModalSecondaryText>
-        {selectedItem && ITEMS[selectedItem].description}
-      </ModalSecondaryText>
+      </Text>
+      <Text size="lg">{selectedItem && ITEMS[selectedItem].description}</Text>
       <DndContext
         sensors={sensors}
         onDragEnd={handleDragEnd}

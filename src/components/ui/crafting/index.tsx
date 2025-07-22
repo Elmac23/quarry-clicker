@@ -6,10 +6,9 @@ import RecipeDisplay from "@/components/ui/crafting/RecipeDisplay";
 import { ITEMS } from "@/data/items";
 import UIModal from "@/components/modal/UIModal";
 import ItemGrid from "../ItemGrid";
-import ModalHeader from "@/components/modal/ModalHeader";
 import CraftingItem from "./CraftingItem";
 import { useInventory } from "@/store/inventory";
-import ModalSecondaryText from "@/components/modal/ModalSecondaryText";
+import Text from "@/components/Text";
 
 type CraftingModalProps = Pick<ModalProps, "isOpen" | "onClose">;
 
@@ -30,12 +29,12 @@ function Crafting({ isOpen, onClose }: CraftingModalProps) {
 
   return (
     <UIModal isOpen={isOpen} onClose={onClose} bg="green">
-      <ModalHeader>
+      <Text as="h2" size="xl" color="primary">
         Crafting {selectedItem && `| ${ITEMS[selectedItem.result.item].name}`}
-      </ModalHeader>
-      <ModalSecondaryText>
+      </Text>
+      <Text size="lg">
         {selectedItem && ITEMS[selectedItem.result.item].description}
-      </ModalSecondaryText>
+      </Text>
       <AnimatePresence mode="wait">
         {selectedItem && (
           <RecipeDisplay key={recipeIndex} recipe={selectedItem} />

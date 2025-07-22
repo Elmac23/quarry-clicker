@@ -16,7 +16,7 @@ function Notifiactions() {
     <ul className="flex flex-col fixed right-4 md:bottom-4 gap-4 z-20 md:top-[unset] top-4">
       <AnimatePresence mode="popLayout">
         {notificationsTop3.map((el) => (
-          <Notification data={el} key={el.itemId} />
+          <Notification data={el} key={el.itemId + el.customMessage} />
         ))}
       </AnimatePresence>
     </ul>

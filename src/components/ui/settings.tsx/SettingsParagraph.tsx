@@ -1,7 +1,12 @@
+import Text from "@/components/Text";
 import React from "react";
 
 function SettingsParagraph({ children }: React.PropsWithChildren) {
-  return <h2 className="text-3xl jersey10 text-primary-500">{children}</h2>;
+  return (
+    <Text size="xl" color="primary">
+      {children}
+    </Text>
+  );
 }
 
 export default SettingsParagraph;

@@ -27,7 +27,7 @@ function RecipeDisplay({ recipe }: RecipeDisplayProps) {
       className="flex flex-col sm:flex-row px-2 sm:px-4 pb-2 mb-2 gap-2 sm:gap-3 md:gap-4 min-h-20 sm:min-h-16 md:min-h-20 border-b-4 border-b-black/10 items-center"
     >
       <ul className="w-full sm:grow flex flex-wrap justify-center sm:justify-around gap-1 sm:gap-2 min-h-16 sm:min-h-12 md:min-h-20 items-center">
-        {recipe.ingerdients.map(
+        {recipe.ingredients.map(
           ({ item, quantity, isSatisfied, totalItemInInventory }, index) => {
             return (
               <li key={index} className="min-h-12 sm:min-h-14 md:min-h-16">

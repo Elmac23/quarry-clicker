@@ -1,4 +1,4 @@
-import { ChanceEntity } from "@/hooks/useComputeChance";
+import { ChanceEntity } from "@/lib/computeChance";
 import { MineKey } from "./mines";
 
 export const BG_DATA = {
@@ -11,7 +11,7 @@ export const BG_DATA = {
       },
     ],
   },
-  copperMine: {
+  tinMine: {
     standard: "/sprites/bg/background_stone.png",
     entities: [
       {
@@ -28,6 +28,63 @@ export const BG_DATA = {
       },
     ],
   },
-} satisfies Partial<
-  Record<MineKey, { standard: string; entities: ChanceEntity<string>[] }>
+  copperMine: {
+    standard: "/sprites/bg/background_stone.png",
+    entities: [
+      {
+        chance: 15,
+        data: "/sprites/bg/background_copper.png",
+      },
+      {
+        chance: 8,
+        data: "/sprites/bg/background_iron.png",
+      },
+    ],
+  },
+  ironMine: {
+    standard: "/sprites/bg/background_stone.png",
+    entities: [
+      {
+        chance: 12,
+        data: "/sprites/bg/background_iron.png",
+      },
+      {
+        chance: 8,
+        data: "/sprites/bg/background_lead.png",
+      },
+    ],
+  },
+  aluminiumMine: {
+    standard: "/sprites/bg/background_stone.png",
+    entities: [
+      {
+        chance: 10,
+        data: "/sprites/bg/background_aluminium.png",
+      },
+      {
+        chance: 12,
+        data: "/sprites/bg/background_lead.png",
+      },
+    ],
+  },
+  finalMine: {
+    standard: "/sprites/bg/background_stone.png",
+    entities: [
+      {
+        chance: 8,
+        data: "/sprites/bg/background_silver.png",
+      },
+      {
+        chance: 6,
+        data: "/sprites/bg/background_gold.png",
+      },
+      {
+        chance: 4,
+        data: "/sprites/bg/background_platinum.png",
+      },
+    ],
+  },
+} satisfies Record<
+  MineKey,
+  { standard: string; entities: ChanceEntity<string>[] }
 >;

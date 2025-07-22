@@ -1,4 +1,4 @@
-import { ItemKey } from "./items";
+import { ItemKey, ItemUpgradeKey } from "./items";
 
 export type Ingredients = {
   item: ItemKey;
@@ -7,6 +7,7 @@ export type Ingredients = {
 
 export type Recipe = {
   recipe: Ingredients;
+  requiredUpgrade?: ItemUpgradeKey;
   quantity: number;
 };
 
@@ -32,7 +33,7 @@ export const RECIPES = {
     quantity: 1,
     recipe: [
       {
-        item: "tinBar",
+        item: "copperBar",
         quantity: 20,
       },
       { item: "tinPickaxe", quantity: 1 },
@@ -258,5 +259,80 @@ export const RECIPES = {
         quantity: 3,
       },
     ],
+  },
+  permitAlpha: {
+    quantity: 1,
+    recipe: [
+      {
+        item: "stone",
+        quantity: 1,
+      },
+    ],
+  },
+  permitBeta: {
+    quantity: 1,
+    requiredUpgrade: "permitAlpha",
+    recipe: [
+      {
+        item: "stone",
+        quantity: 1,
+      },
+    ],
+  },
+  permitGamma: {
+    quantity: 1,
+    requiredUpgrade: "permitBeta",
+    recipe: [
+      {
+        item: "stone",
+        quantity: 1,
+      },
+    ],
+  },
+  permitSigma: {
+    quantity: 1,
+    requiredUpgrade: "permitGamma",
+    recipe: [
+      {
+        item: "stone",
+        quantity: 1,
+      },
+    ],
+  },
+  permitOmega: {
+    quantity: 1,
+    requiredUpgrade: "permitSigma",
+    recipe: [
+      {
+        item: "stone",
+        quantity: 1,
+      },
+    ],
+  },
+
+  // Temporary Upgrade Recipes
+  furnaceNewUpgrade: {
+    quantity: 1,
+    recipe: [{ item: "stone", quantity: 1 }],
+  },
+  furnaceSpeedUpgrade: {
+    quantity: 1,
+    recipe: [{ item: "stone", quantity: 1 }],
+  },
+  criticalChanceUpgrade: {
+    quantity: 1,
+    recipe: [{ item: "stone", quantity: 1 }],
+  },
+  maxStackUpgrade: {
+    quantity: 1,
+    recipe: [{ item: "stone", quantity: 1 }],
+  },
+  moreInventory10Upgrade: {
+    quantity: 1,
+    recipe: [{ item: "stone", quantity: 1 }],
+  },
+  moreInventory20Upgrade: {
+    quantity: 1,
+    recipe: [{ item: "stone", quantity: 1 }],
   },
 } as const satisfies Partial<Record<ItemKey, Recipe>>;

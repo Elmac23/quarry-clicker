@@ -1,8 +1,14 @@
 import ItemTile from "@/components/ItemTile";
-import { ActiveItemKey, ItemKey, ItemPickaxeKey, ITEMS } from "@/data/items";
+import {
+  ActiveItemKey,
+  ItemKey,
+  ItemPickaxeKey,
+  ITEMS,
+  TypedItemWithQuantity,
+} from "@/data/items";
 import { useAppDispatch } from "@/hooks/redux";
 
-import { activeItem, ItemWithQuantity } from "@/store/inventory";
+import { activeItem } from "@/store/inventory";
 import React, { useState } from "react";
 import { SetStateAction, useCallback } from "react";
 import DraggableWrapper from "./DraggableWrapper";
@@ -10,9 +16,10 @@ import { useToggle } from "@/hooks/useToggle";
 import ContextMenu from "@/components/contextMenu";
 import Button from "@/components/Button";
 import { isActiveItem } from "@/lib/isActiveItem";
+import { useAudio } from "@/hooks/useAudio";
 
 type InventoryItemProps = {
-  item: ItemWithQuantity | null;
+  item: TypedItemWithQuantity | null;
   index: number;
   selectedPickaxe: ItemPickaxeKey;
   setSelectedItem: React.Dispatch<SetStateAction<ItemKey | null>>;
@@ -27,6 +34,7 @@ function InventoryItem({
   const dispatch = useAppDispatch();
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const { value, setFalse, setTrue } = useToggle(false);
+  const potionAudio = useAudio("085594_potion-35983.mp3");
 
   const handleMouseEnter = useCallback(() => {
     if (item) setSelectedItem(item.id);
@@ -70,9 +78,10 @@ function InventoryItem({
                 {isActiveItem(item.id) && (
                   <Button
                     className="w-full"
-                    onClick={(e) => {
+                    onClick={async (e) => {
                       e.stopPropagation();
                       dispatch(activeItem(item.id as ActiveItemKey));
+                      if (ITEMS[item.id].type === "potion") potionAudio.play();
                       setFalse();
                     }}
                   >

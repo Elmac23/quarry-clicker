@@ -1,6 +1,6 @@
 import { ItemKey } from "@/data/items";
 import { Mine } from "@/data/mines";
-import { ChanceEntity } from "@/hooks/useComputeChance";
+import { ChanceEntity } from "@/lib/computeChance";
 
 type Returned = {
   entities: ChanceEntity<ItemKey>[];

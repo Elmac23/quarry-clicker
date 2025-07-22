@@ -43,8 +43,6 @@ function UIModal({
       }}
     >
       {children}
-
-      <Button onClick={onClose}>Close</Button>
     </Modal>
   );
 }

@@ -4,12 +4,12 @@ import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
 interface MineState {
-  mine: MineKey;
+  activeMine: MineKey;
   health: number;
 }
 
 const initialState: MineState = {
-  mine: "coalMine",
+  activeMine: "coalMine",
   health: MINES["coalMine"].health,
 };
 
@@ -18,7 +18,7 @@ export const mineSlice = createSlice({
   initialState,
   reducers: {
     changeMine(state, action: PayloadAction<MineKey>) {
-      state.mine = action.payload;
+      state.activeMine = action.payload;
       state.health = MINES[action.payload].health;
     },
 
@@ -27,7 +27,7 @@ export const mineSlice = createSlice({
     },
 
     resetHealth(state) {
-      state.health = MINES[state.mine].health;
+      state.health = MINES[state.activeMine].health;
       return state;
     },
   },
@@ -35,6 +35,6 @@ export const mineSlice = createSlice({
 
 export const { changeMine, dealDamage, resetHealth } = mineSlice.actions;
 
-export const useMine = () => useAppSelector((state) => state.mine);
+export const useMines = () => useAppSelector((state) => state.mine);
 
 export default mineSlice.reducer;

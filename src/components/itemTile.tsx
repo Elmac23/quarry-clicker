@@ -3,6 +3,7 @@ import { cn } from "@/lib/cn";
 import { cva, VariantProps } from "class-variance-authority";
 import React from "react";
 import Sprite from "./Sprite";
+import Text from "./Text";
 
 const itemTileVariants = cva(
   "bg-cover aspect-square pixelated cursor-pointer transition",
@@ -22,13 +23,15 @@ const itemTileVariants = cva(
   }
 );
 
-type ItemTileProps = React.ComponentProps<"div"> &
+type ItemTileProps = Omit<React.ComponentProps<"div">, "as"> &
   VariantProps<typeof itemTileVariants> & {
     itemId?: ItemKey | null;
     quantity?: number;
     counter?: number;
     quantityText?: string;
     containerProps?: Partial<React.ComponentProps<"div">>;
+    as?: React.ElementType;
+    onContextMenu?: React.MouseEventHandler<HTMLElement>;
   };
 
 function ItemTile({
@@ -40,12 +43,15 @@ function ItemTile({
   quantityText,
   onContextMenu,
   containerProps,
+  as = "div",
   ...rest
 }: ItemTileProps) {
   const handleRightClick = (e: React.MouseEvent) => e.preventDefault();
 
+  const Component = as;
+
   return (
-    <div
+    <Component
       className={cn(itemTileVariants({ background }), className)}
       onContextMenu={onContextMenu ?? handleRightClick}
       {...rest}
@@ -57,12 +63,16 @@ function ItemTile({
             alt={ITEMS[itemId].name}
             src={ITEMS[itemId].icon}
           />
-          <p className="absolute md:right-3 right-1 bottom-[-2] text-2xl jersey10 text-white text-shadow-lg select-none">
+          <Text
+            className="absolute md:right-3 right-1 bottom-[-2] text-shadow-lg select-none"
+            size="lg"
+            gutter={false}
+          >
             {getQuantity(quantity, counter, quantityText)}
-          </p>
+          </Text>
         </div>
       )}
-    </div>
+    </Component>
   );
 }
 

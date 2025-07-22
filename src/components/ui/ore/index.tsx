@@ -1,68 +1,107 @@
-import { ITEMS } from "@/data/items";
+import Sprite from "@/components/Sprite";
 import { MINES } from "@/data/mines";
 import { useAppDispatch } from "@/hooks/redux";
-import { computeChance } from "@/hooks/useComputeChance";
+import { useAudio } from "@/hooks/useAudio";
+import { useCalculateDamage } from "@/hooks/useCalculateDmg";
+import { computeChance } from "@/lib/computeChance";
+import { useInterval } from "@/hooks/useInterval";
+import { useKeyButton } from "@/hooks/useKeyButton";
 import { chancesFromMine } from "@/lib/chancesFromMine";
+import { getSpriteId } from "@/lib/getSpriteId";
 import { randomRange } from "@/lib/randomRange";
-import { useBuffs } from "@/store/buffs";
-import { addItem, useInventory } from "@/store/inventory";
-import { dealDamage, resetHealth, useMine } from "@/store/mine";
-import React from "react";
+import { useCheckBuff } from "@/store/buffs";
+import { addItem } from "@/store/inventory";
+import { dealDamage, resetHealth, useMines } from "@/store/mine";
+import { motion } from "motion/react";
+import React, { useState } from "react";
+import { useSettings } from "@/store/settings";
 
 function Ore() {
   const dispatch = useAppDispatch();
-  const { mine, health } = useMine();
-  const { selectedPickaxe } = useInventory();
+  const [spriteId, setSpriteId] = useState(0);
+  const { isRotateOre } = useSettings();
+  const { activeMine: mine, health } = useMines();
   const { entities, standard } = chancesFromMine(MINES[mine]);
   const getDrop = computeChance(entities, standard, 1000);
-  const { activeBuffs } = useBuffs();
+  const fortuneBuff = useCheckBuff("doubleDropChance");
+  const digAudio = useAudio("pickaxe-blow-333695.mp3", 0.5);
+  const diggedAudio = useAudio("digged2.wav", 1);
+  const damage = useCalculateDamage();
 
   const handleClick = () => {
-    const damage = ITEMS[selectedPickaxe].damage;
-    const dmgBuffs = activeBuffs.find((pred) => pred.type === "damage");
-    const dmgMultPercentage = dmgBuffs ? dmgBuffs.value : 0;
-    const dmgMult = dmgMultPercentage / 100 + 1;
+    const fortuneValue = fortuneBuff?.value ?? 0;
+    const lootAmount = randomRange(0, 100) < fortuneValue ? 2 : 1;
+    const newHealth = health - damage;
+    const totalHealth = MINES[mine].health;
 
-    const critChance = ITEMS[selectedPickaxe].criticalChance;
+    const healthPercentage = Math.max(0, newHealth) / totalHealth;
+    const newSpriteId = getSpriteId(healthPercentage * 100);
 
-    const criticalChanceBuff = activeBuffs.find(
-      (pred) => pred.type === "criticalChance"
-    );
+    setSpriteId(Math.min(4, Math.max(0, newSpriteId)));
 
-    const criticalAdditionalChance = criticalChanceBuff
-      ? criticalChanceBuff.value
-      : 0;
+    dispatch(dealDamage(damage));
 
-    const isCritical =
-      randomRange(0, 100) < critChance + criticalAdditionalChance;
-
-    const finalDmg = damage * dmgMult * (isCritical ? 2 : 1);
-
-    const newHealth = health - finalDmg;
-
-    console.log(finalDmg);
-
-    dispatch(dealDamage(finalDmg));
+    digAudio.play();
 
     if (newHealth <= 0) {
+      setSpriteId(0);
+      diggedAudio.play();
       const item = getDrop();
       dispatch(resetHealth());
       dispatch(
         addItem({
-          amount: 1,
-          item,
+          quantity: lootAmount,
+          id: item,
         })
       );
+    } else {
     }
   };
 
+  useKeyButton(" ", handleClick);
+
+  // const [start, stop] = useInterval(
+  //   () => {
+  //     handleClick();
+  //   },
+  //   150,
+  //   [handleClick],
+  //   false
+  // );
+
   return (
-    <button
-      className="h-[100px] w-[100px] cursor-pointer bg-amber-300 fixed left-[50%] top-[50%] translate-y-[-50%] translate-x-[-50%]"
-      onClick={() => handleClick()}
+    <motion.div
+      className="aspect-square size-90 cursor-pointer fixed left-[50%] top-[50%] translate-y-[-50%] translate-x-[-50%] "
+      whileHover={{
+        scale: 1.05,
+      }}
+      whileTap={{
+        scale: 0.95,
+      }}
+      animate={
+        isRotateOre
+          ? {
+              rotateZ: 360,
+              transition: {
+                repeat: Infinity,
+                ease: "linear",
+                duration: 60,
+              },
+            }
+          : {}
+      }
     >
-      Get stone!
-    </button>
+      <Sprite
+        className="pixelated bg-center bg-cover bg-no-repeat"
+        onClick={handleClick}
+        src={`sprites/ui/${MINES[mine].oreSprites[spriteId]}`}
+        alt={mine}
+        //drill
+        // onMouseDown={start}
+        // onMouseUp={stop}
+        // onMouseLeave={stop}
+      />
+    </motion.div>
   );
 }
 

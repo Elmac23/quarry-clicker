@@ -8,6 +8,7 @@ import { useInterval } from "@/hooks/useInterval";
 import ItemTile from "@/components/ItemTile";
 import { ITEMS } from "@/data/items";
 import { motion } from "motion/react";
+import Text from "@/components/Text";
 
 export type NotificationProps = {
   data: NotificationWithTimer;
@@ -46,9 +47,14 @@ function Notification({ data }: NotificationProps) {
           quantity={data.amount}
         />
       </div>
-      <p className="jersey10 text-xl md:text-3xl grow text-center break-words leading-tight">
+      <Text
+        className="md:text-3xl grow text-center break-words leading-tight"
+        size="xl"
+        color="primary"
+        gutter={false}
+      >
         {data.customMessage ?? ITEMS[data.itemId].name}
-      </p>
+      </Text>
     </motion.li>
   );
 }

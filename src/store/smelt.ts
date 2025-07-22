@@ -1,8 +1,8 @@
-import { ItemKey, ItemOreKey, ITEMS } from "@/data/items";
+import { ItemKey, ItemOreKey, ITEMS, ItemUpgradeKey } from "@/data/items";
 import { useAppSelector } from "@/hooks/redux";
-import { oreToBarNameInfer } from "@/lib/oreToBarNameInferer";
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
+import { activeItem } from "./inventory";
 
 export type SmeltPosition = {
   result: ItemKey;
@@ -14,24 +14,44 @@ export type SmeltPosition = {
 interface SmeltState {
   smeltPositions: Array<SmeltPosition | null>;
   maxSmelters: number;
+  speed: number;
 }
 
+const INITIAL_FURNACE_COUNT = 5;
+
 const initialState: SmeltState = {
-  smeltPositions: Array(5).fill(null),
-  maxSmelters: 5,
+  smeltPositions: Array(INITIAL_FURNACE_COUNT).fill(null),
+  maxSmelters: INITIAL_FURNACE_COUNT,
+  speed: 1,
 };
 
 export const smeltSlice = createSlice({
   name: "smelt",
   initialState,
+  extraReducers: (builder) => {
+    builder.addCase(activeItem, (state, action) => {
+      if (ITEMS[action.payload].type === "upgrade")
+        switch (action.payload as ItemUpgradeKey) {
+          case "furnaceNewUpgrade":
+            state.maxSmelters++;
+            state.smeltPositions.push(null);
+            break;
+
+          case "furnaceSpeedUpgrade":
+            state.speed += 0.15;
+            break;
+        }
+    });
+  },
   reducers: {
-    tick(state) {
+    tick(state, action: PayloadAction<{ multiplier?: number }>) {
+      const mult = (action.payload.multiplier ?? 0) / 100 + 1;
       state.smeltPositions = state.smeltPositions.map((position) => {
         if (!position) return null;
         return {
           ...position,
-          timeLeft: Math.max(position.timeLeft - 0.1, 0),
-          isDone: position.timeLeft - 0.1 <= 0,
+          timeLeft: Math.max(position.timeLeft - 0.1 * mult * state.speed, 0),
+          isDone: position.timeLeft - 0.1 * mult * state.speed <= 0,
         };
       });
 
@@ -43,7 +63,7 @@ export const smeltSlice = createSlice({
 
       if (!position) return state;
 
-      position.timeLeft = Math.max(position.timeLeft - 1, 0);
+      position.timeLeft = Math.max(position.timeLeft - state.speed, 0);
       position.isDone = position.timeLeft <= 0;
     },
 
@@ -58,7 +78,7 @@ export const smeltSlice = createSlice({
 
       const freeIndex = state.smeltPositions.findIndex((el) => !el);
 
-      const result = oreToBarNameInfer(action.payload.item);
+      const result = ITEMS[action.payload.item].result.id;
 
       if (!result) return state;
 

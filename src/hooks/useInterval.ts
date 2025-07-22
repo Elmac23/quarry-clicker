@@ -4,6 +4,7 @@ import { useToggle } from "./useToggle";
 export function useInterval(
   cb: () => unknown,
   intervalTime: number,
+  dependencies: any[] = [],
   isInstant: boolean = true
 ) {
   const { setFalse, setTrue, value } = useToggle(isInstant);
@@ -17,10 +18,7 @@ export function useInterval(
         clearInterval(intervalId);
       };
     }
-  }, [value]);
+  }, [value, ...dependencies]);
 
-  return {
-    startInterval: setTrue,
-    pauseInterval: setFalse,
-  };
+  return [setTrue, setFalse];
 }

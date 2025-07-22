@@ -1,20 +1,15 @@
 import { ModalProps } from "@/components/modal";
-import ModalHeader from "@/components/modal/ModalHeader";
 import UIModal from "@/components/modal/UIModal";
 import ItemGrid from "../ItemGrid";
-import {
-  ItemWithQuantity,
-  removeItem,
-  useInventory,
-  useItem,
-} from "@/store/inventory";
+import { removeItem, useInventory, useItem } from "@/store/inventory";
 import { useMemo } from "react";
-import { ItemOreKey, ITEMS } from "@/data/items";
+import { ItemOreKey, ITEMS, TypedItemWithQuantity } from "@/data/items";
 import ItemTile from "@/components/ItemTile";
 import { useAppDispatch } from "@/hooks/redux";
 import { addItem, SmeltPosition, useSmelt } from "@/store/smelt";
 import SmeltingItem from "./SmeltingItem";
 import SmeltedItem from "./SmeltedItem";
+import Text from "@/components/Text";
 
 type SmeltingModalProps = Pick<ModalProps, "isOpen" | "onClose">;
 
@@ -27,13 +22,22 @@ function Smelting({ isOpen, onClose }: SmeltingModalProps) {
 
   const ores = useMemo(() => {
     return items.filter((item) => item && ITEMS[item?.id].type === "smeltable");
-  }, [items]) as ItemWithQuantity[];
+  }, [items]) as TypedItemWithQuantity[];
 
   return (
     <UIModal isOpen={isOpen} onClose={onClose}>
-      <ModalHeader>Smelting</ModalHeader>
+      <Text as="h2" size="xl" color="primary">
+        Smelting
+      </Text>
+      {!smeltPositions.length && (
+        <Text size="xl" className="w-full">
+          Craft Stone Furnace first!
+        </Text>
+      )}
+
       <div className="grid grid-fluid md:grid-fluid-lg gap-4 pb-4 mb-4 border-b-4 border-b-black/30">
-        {smeltPositions.map((item, index) => getSmeltPosition(item, index))}
+        {smeltPositions.length &&
+          smeltPositions.map((item, index) => getSmeltPosition(item, index))}
       </div>
       <div className="flex flex-row gap-4">
         <ItemGrid

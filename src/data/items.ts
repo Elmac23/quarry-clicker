@@ -1,5 +1,10 @@
 import { BuffId } from "./buffs";
 
+export type ItemWithQuantity = {
+  id: string;
+  quantity: number;
+};
+
 export type BaseItem = {
   name: string;
   icon: string;
@@ -15,6 +20,7 @@ export type SmeltableItem = BaseItem & {
   type: "smeltable";
   value: number;
   smeltTime: number;
+  result: ItemWithQuantity;
 };
 
 export type PickaxeItem = BaseItem & {
@@ -29,9 +35,24 @@ export type PotionItem = BaseItem & {
   value: number;
 };
 
+export type ConsumableItem = BaseItem & {
+  type: "consumable";
+};
+
 export type UpgradeItem = BaseItem & {
   type: "upgrade";
-  effect: never;
+  effect:
+    | "permit1"
+    | "permit2"
+    | "permit3"
+    | "permit4"
+    | "permit5"
+    | "furnaceNew"
+    | "furnaceSpeed"
+    | "criticalChance"
+    | "maxStack"
+    | "moreInventory10"
+    | "moreInventory20";
 };
 
 export type Item =
@@ -39,7 +60,8 @@ export type Item =
   | MaterialItem
   | SmeltableItem
   | PotionItem
-  | UpgradeItem;
+  | UpgradeItem
+  | ConsumableItem;
 
 export type ItemType = Item["type"];
 
@@ -67,6 +89,10 @@ export const ITEMS = {
     value: 0,
     smeltTime: 5,
     description: "It gets everywhere... Can be smelted into glass",
+    result: {
+      id: "glass",
+      quantity: 1,
+    },
   },
   glass: {
     name: "Glass",
@@ -91,19 +117,81 @@ export const ITEMS = {
   },
   clay: {
     name: "Clay",
+    icon: "/sprites/items/materials/Clay.png",
+    type: "material",
+    value: 0,
+    description: "Moldable earth material useful for pottery.",
+  },
+  graphite: {
+    name: "Graphite",
+    icon: "/sprites/ui/questionmark.png",
+    type: "material",
+    value: 0,
+    description: "Moldable earth material useful for pottery.",
+  },
+  palestone: {
+    name: "Palestone",
+    icon: "/sprites/items/materials/Palestone.png",
+    type: "material",
+    value: 0,
+    description: "Mysterious pale gemstone with subtle inner light.",
+  },
+  deepgrit: {
+    name: "Deepgrit",
     icon: "/sprites/ui/questionmark.png",
     type: "material",
     value: 0,
     description: "Moldable earth material useful for pottery.",
   },
 
-  // Ores
+  /// upgrades
+  permitAlpha: {
+    name: "Permit Alpha",
+    icon: "/sprites/items/upgrades/permit1.png",
+    type: "upgrade",
+    description: "Unlocks Tin Mine",
+    effect: "permit1",
+  },
+  permitBeta: {
+    name: "Permit Beta",
+    icon: "/sprites/items/upgrades/permit2.png",
+    type: "upgrade",
+    description: "Unlocks Copper Mine",
+    effect: "permit2",
+  },
+  permitGamma: {
+    name: "Permit Gamma",
+    icon: "/sprites/items/upgrades/permit3.png",
+    type: "upgrade",
+    description: "Unlocks Iron Mine",
+    effect: "permit3",
+  },
+  permitSigma: {
+    name: "Permit Sigma",
+    icon: "/sprites/items/upgrades/permit4.png",
+    type: "upgrade",
+    description: "Unlocks Lead/Aluminium Mine",
+    effect: "permit4",
+  },
+  permitOmega: {
+    name: "Permit Omega",
+    icon: "/sprites/items/upgrades/permit5.png",
+    type: "upgrade",
+    description: "Unlocks Final Mine",
+    effect: "permit5",
+  },
+
+  // Ores - ordered by tier
   tinOre: {
     name: "Tin Ore",
     icon: "/sprites/items/smeltable/Tin_Ore.png",
     type: "smeltable",
     value: 0,
     smeltTime: 5,
+    result: {
+      id: "tinBar",
+      quantity: 1,
+    },
     description: "Common metallic ore that can be smelted into tin bars.",
   },
   copperOre: {
@@ -113,57 +201,220 @@ export const ITEMS = {
     value: 0,
     smeltTime: 7.5,
     description: "Reddish metal ore excellent for conducting electricity.",
-  },
-  ironOre: {
-    name: "Iron Ore",
-    icon: "/sprites/items/smeltable/Iron_Ore.png",
-    type: "smeltable",
-    value: 0,
-    smeltTime: 10,
-    description: "Sturdy metal ore that forms the backbone of industry.",
+    result: {
+      id: "copperBar",
+      quantity: 1,
+    },
   },
   leadOre: {
     name: "Lead Ore",
     icon: "/sprites/items/smeltable/Lead_Ore.png",
     type: "smeltable",
     value: 0,
-    smeltTime: 12.5,
+    smeltTime: 10,
     description: "Heavy metal ore with useful properties.",
+    result: {
+      id: "leadBar",
+      quantity: 1,
+    },
+  },
+  ironOre: {
+    name: "Iron Ore",
+    icon: "/sprites/items/smeltable/Iron_Ore.png",
+    type: "smeltable",
+    value: 0,
+    smeltTime: 12.5,
+    description: "Sturdy metal ore that forms the backbone of industry.",
+    result: {
+      id: "ironBar",
+      quantity: 1,
+    },
   },
   aluminiumOre: {
     name: "Aluminium Ore",
     icon: "/sprites/items/smeltable/Aluminium_Ore.png",
     type: "smeltable",
     value: 0,
-    smeltTime: 15,
+    smeltTime: 17.5,
     description: "Lightweight metal ore perfect for advanced crafting.",
+    result: {
+      id: "aluminiumBar",
+      quantity: 1,
+    },
+  },
+  titaniumOre: {
+    name: "Titanium Ore",
+    icon: "/sprites/ui/questionmark.png",
+    type: "smeltable",
+    value: 0,
+    smeltTime: 20,
+    description: "Extremely strong and lightweight metallic ore.",
+    result: {
+      id: "titaniumBar",
+      quantity: 1,
+    },
+  },
+  tungstenOre: {
+    name: "Tungsten Ore",
+    icon: "/sprites/ui/questionmark.png",
+    type: "smeltable",
+    value: 0,
+    smeltTime: 22.5,
+    description: "The hardest ore with the highest melting point.",
+    result: {
+      id: "tungstenBar",
+      quantity: 1,
+    },
+  },
+  cobaltOre: {
+    name: "Cobalt Ore",
+    icon: "/sprites/ui/questionmark.png",
+    type: "smeltable",
+    value: 0,
+    smeltTime: 25,
+    description: "Hard and lustrous metallic ore with high melting point.",
+    result: {
+      id: "cobaltBar",
+      quantity: 1,
+    },
   },
   silverOre: {
     name: "Silver Ore",
     icon: "/sprites/items/smeltable/Silver_Ore.png",
     type: "smeltable",
     value: 0,
-    smeltTime: 17.5,
+    smeltTime: 27.5,
     description: "Precious white metal ore with high conductivity.",
+    result: {
+      id: "silverBar",
+      quantity: 1,
+    },
+  },
+  chromeOre: {
+    name: "Chrome Ore",
+    icon: "/sprites/ui/questionmark.png",
+    type: "smeltable",
+    value: 0,
+    smeltTime: 30,
+    description: "Lustrous metallic ore with exceptional shine and hardness.",
+    result: {
+      id: "chromeBar",
+      quantity: 1,
+    },
   },
   goldOre: {
     name: "Gold Ore",
     icon: "/sprites/items/smeltable/Gold_Ore.png",
     type: "smeltable",
     value: 0,
-    smeltTime: 20,
+    smeltTime: 32.5,
     description: "Valuable yellow metal ore prized for its beauty.",
+    result: {
+      id: "goldenBar",
+      quantity: 1,
+    },
   },
   platinumOre: {
     name: "Platinum Ore",
     icon: "/sprites/items/smeltable/Platinum_Ore.png",
     type: "smeltable",
     value: 0,
-    smeltTime: 22.5,
+    smeltTime: 35,
     description: "Rare and extremely valuable white metal ore.",
+    result: {
+      id: "platinumBar",
+      quantity: 1,
+    },
   },
 
-  // Bars
+  uraniumOre: {
+    name: "Uranium Ore",
+    icon: "/sprites/ui/questionmark.png",
+    type: "smeltable",
+    value: 0,
+    smeltTime: 40,
+    description: "Radioactive heavy ore with immense energy potential.",
+    result: {
+      id: "uraniumBar",
+      quantity: 1,
+    },
+  },
+
+  // Palestone Ore Variants
+  palestoneChromeOre: {
+    name: "Palestone Chrome Ore",
+    icon: "/sprites/items/smeltable/Palestone_Chrome_Ore.png",
+    type: "smeltable",
+    value: 0,
+    smeltTime: 32,
+    description: "Chrome ore infused with mysterious palestone energy.",
+    result: {
+      id: "chromeBar",
+      quantity: 1,
+    },
+  },
+  palestoneCobaltOre: {
+    name: "Palestone Cobalt Ore",
+    icon: "/sprites/items/smeltable/Palestone_Cobalt_Ore.png",
+    type: "smeltable",
+    value: 0,
+    smeltTime: 27,
+    description: "Cobalt ore enhanced with palestone properties.",
+    result: {
+      id: "cobaltBar",
+      quantity: 1,
+    },
+  },
+  palestoneGoldOre: {
+    name: "Palestone Gold Ore",
+    icon: "/sprites/items/smeltable/Palestone_Gold_Ore.png",
+    type: "smeltable",
+    value: 0,
+    smeltTime: 35,
+    description: "Gold ore imbued with palestone's mystical power.",
+    result: {
+      id: "goldenBar",
+      quantity: 1,
+    },
+  },
+  palestonePlatinumOre: {
+    name: "Palestone Platinum Ore",
+    icon: "/sprites/items/smeltable/Palestone_Platinum_Ore.png",
+    type: "smeltable",
+    value: 0,
+    smeltTime: 37,
+    description: "Platinum ore charged with palestone essence.",
+    result: {
+      id: "platinumBar",
+      quantity: 1,
+    },
+  },
+  palestoneSilverOre: {
+    name: "Palestone Silver Ore",
+    icon: "/sprites/items/smeltable/Palestone_Silver_Ore.png",
+    type: "smeltable",
+    value: 0,
+    smeltTime: 29,
+    description: "Silver ore enriched with palestone magic.",
+    result: {
+      id: "silverBar",
+      quantity: 1,
+    },
+  },
+  palestoneTitaniumOre: {
+    name: "Palestone Titanium Ore",
+    icon: "/sprites/items/smeltable/Palestone_Titanium_Ore.png",
+    type: "smeltable",
+    value: 0,
+    smeltTime: 22,
+    description: "Titanium ore strengthened by palestone energy.",
+    result: {
+      id: "titaniumBar",
+      quantity: 1,
+    },
+  },
+
+  // Bars - ordered by tier
   tinBar: {
     name: "Tin Bar",
     icon: "/sprites/items/materials/Tin_Bar.png",
@@ -185,6 +436,13 @@ export const ITEMS = {
     value: 0,
     description: "Alloy of copper and tin, stronger than either alone.",
   },
+  leadBar: {
+    name: "Lead Bar",
+    icon: "/sprites/items/materials/Lead_Bar.png",
+    type: "material",
+    value: 0,
+    description: "Dense lead metal useful for specific applications.",
+  },
   ironBar: {
     name: "Iron Bar",
     icon: "/sprites/items/materials/Iron_Bar.png",
@@ -199,12 +457,69 @@ export const ITEMS = {
     value: 0,
     description: "Strong iron alloy ideal for advanced tools.",
   },
+  aluminiumBar: {
+    name: "Aluminium Bar",
+    icon: "/sprites/items/materials/Aluminium_Bar.png",
+    type: "material",
+    value: 0,
+    description: "Lightweight aluminum perfect for high-tech gear.",
+  },
+  titaniumBar: {
+    name: "Titanium Bar",
+    icon: "/sprites/items/materials/Titanium_Bar.png",
+    type: "material",
+    value: 0,
+    description: "Extremely strong and lightweight metal bar.",
+  },
+  vioriteBar: {
+    name: "Viorite Bar",
+    icon: "/sprites/items/materials/Viorite_Bar.png",
+    type: "material",
+    value: 0,
+    description: "Mystical purple metal with unknown properties.",
+  },
+  tungstenBar: {
+    name: "Tungsten Bar",
+    icon: "/sprites/items/materials/Tungsten_Bar.png",
+    type: "material",
+    value: 0,
+    description: "The hardest metal with the highest melting point.",
+  },
+  cobaltBar: {
+    name: "Cobalt Bar",
+    icon: "/sprites/items/materials/Cobalt_Bar.png",
+    type: "material",
+    value: 0,
+    description: "Hard, lustrous metal with high melting point.",
+  },
+  azurythBar: {
+    name: "Azuryth Bar",
+    icon: "/sprites/items/materials/Azuryth_Bar.png",
+    type: "material",
+    value: 0,
+    description: "Ethereal blue metal that shimmers with otherworldly energy.",
+  },
   silverBar: {
     name: "Silver Bar",
     icon: "/sprites/items/materials/Silver_Bar.png",
     type: "material",
     value: 0,
     description: "Precious silver metal with excellent conductivity.",
+  },
+  chromeBar: {
+    name: "Chrome Bar",
+    icon: "/sprites/items/materials/Chrome_Bar.png",
+    type: "material",
+    value: 0,
+    description:
+      "Polished metallic bar with mirror-like finish and superior hardness.",
+  },
+  crimfireBar: {
+    name: "Crimfire Bar",
+    icon: "/sprites/items/materials/Crimfire_Bar.png",
+    type: "material",
+    value: 0,
+    description: "Fiery red metal that radiates intense heat and energy.",
   },
   goldenBar: {
     name: "Golden Bar",
@@ -213,6 +528,13 @@ export const ITEMS = {
     value: 0,
     description: "Pure gold bar of exceptional value and beauty.",
   },
+  mossilverBar: {
+    name: "Mossilver Bar",
+    icon: "/sprites/ui/questionmark.png",
+    type: "material",
+    value: 0,
+    description: "Enchanted silver alloy with moss-like patterns.",
+  },
   platinumBar: {
     name: "Platinum Bar",
     icon: "/sprites/items/materials/Platinum_Bar.png",
@@ -220,19 +542,54 @@ export const ITEMS = {
     value: 0,
     description: "Ultra-rare platinum metal of supreme quality.",
   },
-  aluminiumBar: {
-    name: "Aluminium Bar",
-    icon: "/sprites/items/materials/Aluminium_Bar.png",
+  uraniumBar: {
+    name: "Uranium Bar",
+    icon: "/sprites/items/materials/Uranium_Bar.png",
     type: "material",
     value: 0,
-    description: "Lightweight aluminum perfect for high-tech gear.",
+    description: "Radioactive heavy metal with immense energy potential.",
   },
-  leadBar: {
-    name: "Lead Bar",
-    icon: "/sprites/items/materials/Lead_Bar.png",
+  auroryteBar: {
+    name: "Auroryte Bar",
+    icon: "/sprites/ui/questionmark.png",
     type: "material",
     value: 0,
-    description: "Dense lead metal useful for specific applications.",
+    description: "Shimmering metal that captures aurora lights.",
+  },
+  palladiumBar: {
+    name: "Palladium Bar",
+    icon: "/sprites/ui/questionmark.png",
+    type: "material",
+    value: 0,
+    description: "Rare precious metal with exceptional properties.",
+  },
+  mythrilBar: {
+    name: "Mythril Bar",
+    icon: "/sprites/ui/questionmark.png",
+    type: "material",
+    value: 0,
+    description: "Legendary metal of incredible lightness and strength.",
+  },
+  diamondiumBar: {
+    name: "Diamondium Bar",
+    icon: "/sprites/ui/questionmark.png",
+    type: "material",
+    value: 0,
+    description: "Crystalline metal harder than diamond itself.",
+  },
+  darkMatter: {
+    name: "Dark Matter",
+    icon: "/sprites/ui/questionmark.png",
+    type: "material",
+    value: 0,
+    description: "Mysterious substance that bends reality itself.",
+  },
+  infinitiumBar: {
+    name: "Infinitium Bar",
+    icon: "/sprites/ui/questionmark.png",
+    type: "material",
+    value: 0,
+    description: "Ultimate metal containing infinite possibilities.",
   },
 
   // Gems
@@ -267,7 +624,7 @@ export const ITEMS = {
   },
   sapphire: {
     name: "Sapphire",
-    icon: "/sprites/items/materials/Saphire.png",
+    icon: "/sprites/items/materials/Sapphire.png",
     type: "material",
     value: 0,
     description: "Deep blue gemstone representing wisdom and royalty.",
@@ -291,9 +648,8 @@ export const ITEMS = {
   geode: {
     name: "Geode",
     icon: "/sprites/items/materials/Geode.png",
-    type: "material",
-    value: 0,
-    description: "Mysterious rock formation containing hidden treasures.",
+    type: "consumable",
+    description: "Mysterious rock formation containing jewels and coal.",
   },
   gear: {
     name: "Gear",
@@ -359,6 +715,50 @@ export const ITEMS = {
     description: "Enhanced combiner for complex material fusion.",
   },
 
+  // Temporary Upgrades
+  furnaceNewUpgrade: {
+    name: "Furnace New",
+    icon: "/sprites/items/materials/Gear.png",
+    type: "upgrade",
+    description: "Unlocks new furnace functionality",
+    effect: "furnaceNew",
+  },
+  furnaceSpeedUpgrade: {
+    name: "Furnace Speed",
+    icon: "/sprites/items/materials/Gear.png",
+    type: "upgrade",
+    description: "Increases furnace speed",
+    effect: "furnaceSpeed",
+  },
+  criticalChanceUpgrade: {
+    name: "Critical Chance",
+    icon: "/sprites/items/materials/Gear.png",
+    type: "upgrade",
+    description: "Increases critical hit chance",
+    effect: "criticalChance",
+  },
+  maxStackUpgrade: {
+    name: "Max Stack",
+    icon: "/sprites/items/materials/Gear.png",
+    type: "upgrade",
+    description: "Increases maximum stack size",
+    effect: "maxStack",
+  },
+  moreInventory10Upgrade: {
+    name: "Inventory +10",
+    icon: "/sprites/items/materials/Gear.png",
+    type: "upgrade",
+    description: "Adds 10 more inventory slots",
+    effect: "moreInventory10",
+  },
+  moreInventory20Upgrade: {
+    name: "Inventory +20",
+    icon: "/sprites/items/materials/Gear.png",
+    type: "upgrade",
+    description: "Adds 20 more inventory slots",
+    effect: "moreInventory20",
+  },
+
   // Tools - Pickaxes
   woodenPickaxe: {
     damage: 1,
@@ -369,7 +769,7 @@ export const ITEMS = {
     description: "Basic mining tool made from wood, good for starting out.",
   },
   stonePickaxe: {
-    damage: 3,
+    damage: 1.5,
     criticalChance: 2,
     icon: "/sprites/items/pickaxes/Stone_Pickaxe.png",
     name: "Stone Pickaxe",
@@ -377,7 +777,7 @@ export const ITEMS = {
     description: "Crude but effective stone tool for mining harder materials.",
   },
   tinPickaxe: {
-    damage: 5,
+    damage: 3,
     criticalChance: 3,
     icon: "/sprites/items/pickaxes/Tin_Pickaxe.png",
     name: "Tin Pickaxe",
@@ -385,7 +785,7 @@ export const ITEMS = {
     description: "First metal pickaxe, more durable than stone.",
   },
   copperPickaxe: {
-    damage: 7,
+    damage: 4,
     criticalChance: 4,
     icon: "/sprites/items/pickaxes/Copper_Pickaxe.png",
     name: "Copper Pickaxe",
@@ -393,7 +793,7 @@ export const ITEMS = {
     description: "Efficient copper tool that cuts through rock easily.",
   },
   bronzePickaxe: {
-    damage: 10,
+    damage: 6,
     criticalChance: 5,
     icon: "/sprites/items/pickaxes/Bronze_Pickaxe.png",
     name: "Bronze Pickaxe",
@@ -401,60 +801,61 @@ export const ITEMS = {
     description: "Strong bronze alloy pickaxe for serious mining.",
   },
   ironPickaxe: {
-    damage: 15,
+    damage: 8,
     criticalChance: 7,
     icon: "/sprites/items/pickaxes/Iron_Pickaxe.png",
     name: "Iron Pickaxe",
     type: "pickaxe",
     description: "Sturdy iron tool capable of mining most materials.",
   },
+  leadPickaxe: {
+    damage: 10,
+    criticalChance: 10,
+    icon: "/sprites/items/pickaxes/Lead_Pickaxe.png",
+    name: "Lead Pickaxe",
+    type: "pickaxe",
+    description: "Heavy-duty lead tool that crushes through any material.",
+  },
   steelPickaxe: {
-    damage: 20,
-    criticalChance: 9,
+    damage: 12,
+    criticalChance: 12,
     icon: "/sprites/items/pickaxes/Steel_Pickaxe.png",
     name: "Steel Pickaxe",
     type: "pickaxe",
     description: "High-quality steel tool for efficient mining operations.",
   },
+  aluminiumPickaxe: {
+    damage: 14,
+    criticalChance: 13,
+    icon: "/sprites/items/pickaxes/Aluminium_Pickaxe.png",
+    name: "Aluminium Pickaxe",
+    type: "pickaxe",
+    description: "Lightweight yet powerful aluminum tool for advanced miners.",
+  },
+
   silverPickaxe: {
-    damage: 25,
-    criticalChance: 11,
+    damage: 17,
+    criticalChance: 15,
     icon: "/sprites/items/pickaxes/Silver_Pickaxe.png",
     name: "Silver Pickaxe",
     type: "pickaxe",
     description: "Precious metal pickaxe with enhanced mining capabilities.",
   },
   goldenPickaxe: {
-    damage: 35,
-    criticalChance: 14,
+    damage: 20,
+    criticalChance: 16,
     icon: "/sprites/items/pickaxes/Golden_Pickaxe.png",
     name: "Golden Pickaxe",
     type: "pickaxe",
     description: "Luxurious gold tool that mines with incredible efficiency.",
   },
   platinumPickaxe: {
-    damage: 50,
+    damage: 25,
     criticalChance: 18,
     icon: "/sprites/items/pickaxes/Platinum_Pickaxe.png",
     name: "Platinum Pickaxe",
     type: "pickaxe",
     description: "Ultimate platinum tool for the most demanding mining tasks.",
-  },
-  aluminiumPickaxe: {
-    damage: 60,
-    criticalChance: 22,
-    icon: "/sprites/items/pickaxes/Aluminium_Pickaxe.png",
-    name: "Aluminium Pickaxe",
-    type: "pickaxe",
-    description: "Lightweight yet powerful aluminum tool for advanced miners.",
-  },
-  leadPickaxe: {
-    damage: 75,
-    criticalChance: 25,
-    icon: "/sprites/items/pickaxes/Lead_Pickaxe.png",
-    name: "Lead Pickaxe",
-    type: "pickaxe",
-    description: "Heavy-duty lead tool that crushes through any material.",
   },
 
   /// Potions
@@ -629,4 +1030,21 @@ export type ItemOreKey = {
   [K in ItemKey]: (typeof ITEMS)[K] extends SmeltableItem ? K : never;
 }[ItemKey];
 
-export type ActiveItemKey = ItemPickaxeKey | ItemPotionKey | ItemUpgradeKey;
+export type ItemConsumableKey = {
+  [K in ItemKey]: (typeof ITEMS)[K] extends ConsumableItem ? K : never;
+}[ItemKey];
+
+export type ActiveItemKey =
+  | ItemPickaxeKey
+  | ItemPotionKey
+  | ItemUpgradeKey
+  | ItemConsumableKey;
+
+export function isItemKey(key: string): key is ItemKey {
+  return key in ITEMS;
+}
+
+export type TypedItemWithQuantity = {
+  id: ItemKey;
+  quantity: number;
+};

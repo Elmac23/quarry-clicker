@@ -1,8 +1,6 @@
-import { Buff, BUFFS } from "@/data/buffs";
-import { MineKey, MINES } from "@/data/mines";
+import { Buff, BUFFS, BuffType } from "@/data/buffs";
 import { useAppSelector } from "@/hooks/redux";
 import { createSlice } from "@reduxjs/toolkit";
-import type { PayloadAction } from "@reduxjs/toolkit";
 import { activeItem } from "./inventory";
 import { ITEMS, PotionItem } from "@/data/items";
 
@@ -43,7 +41,7 @@ export const buffSlice = createSlice({
     },
     tick: (state) => {
       const buffsAfterTick = state.activeBuffs.map((buff) => {
-        if (buff.duration < 2) return null;
+        if (buff.timeLeft < 2) return null;
 
         buff.timeLeft--;
 
@@ -57,6 +55,17 @@ export const buffSlice = createSlice({
 
 export const { clearBuffs, tick } = buffSlice.actions;
 
-export const useBuffs = () => useAppSelector((state) => state.buffs);
+export const useBuffs = () => {
+  const isEmpty = useAppSelector(
+    (state) => state.buffs.activeBuffs.length === 0
+  );
+  return { ...useAppSelector((state) => state.buffs), isEmpty };
+};
+
+export const useCheckBuff = (buffType: BuffType) => {
+  const { activeBuffs } = useAppSelector((state) => state.buffs);
+
+  return activeBuffs.find((buff) => buff.type == buffType);
+};
 
 export default buffSlice.reducer;

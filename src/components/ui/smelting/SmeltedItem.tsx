@@ -21,8 +21,8 @@ function SmeltedItem({ index, item }: SmeltItemProps) {
         dispatch(incrementStat("totalSmelted"));
         dispatch(
           addItem({
-            amount: 1,
-            item: item.result,
+            quantity: 1,
+            id: item.result,
           })
         );
       }}

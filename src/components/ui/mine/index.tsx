@@ -1,7 +1,7 @@
 import ItemTile from "@/components/ItemTile";
 import { ModalProps } from "@/components/modal";
-import ModalHeader from "@/components/modal/ModalHeader";
 import UIModal from "@/components/modal/UIModal";
+import Text from "@/components/Text";
 import { useAppDispatch } from "@/hooks/redux";
 import { useMinesDisplayData } from "@/hooks/useMinesDisplayData";
 import { changeMine } from "@/store/mine";
@@ -14,7 +14,9 @@ function Mine({ isOpen, onClose }: QuestModalProps) {
   const dispatch = useAppDispatch();
   return (
     <UIModal bg="gray" isOpen={isOpen} onClose={onClose}>
-      <ModalHeader>Mines</ModalHeader>
+      <Text as="h2" size="xl" color="primary">
+        Mines
+      </Text>
       <ul className="space-y-4 mb-4 max-h-96 overflow-x-hidden overflow-y-scroll custom-scrollbar p-2">
         {mines.map((mine) => (
           <li

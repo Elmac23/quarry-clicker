@@ -41,7 +41,7 @@ export const BUFFS = {
   wrathEffect: {
     name: "Wrath",
     type: "damage",
-    duration: 300, // 5 minutes
+    duration: 5, // 5 minutes
     value: 20, // 20% damage increase
     icon: "/sprites/ui/Wrath.png",
   },
@@ -171,7 +171,7 @@ export const BUFFS = {
     name: "Smelting Speed III",
     type: "smeltingSpeed",
     duration: 600,
-    value: 75, // 75% faster smelting
+    value: 2000, // 75% faster smelting
     icon: "/sprites/ui/Smelting.png",
   },
 } as const satisfies Record<BuffId, Buff>;

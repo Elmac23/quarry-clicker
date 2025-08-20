@@ -82,7 +82,7 @@ function InventoryItem({
               position={position}
               isOpen={value}
               onClose={setFalse}
-              className="bg-green-900/80 p-4 border-[10] pixelated rounded-2xl"
+              className="bg-green-950/90 p-4 border-[10] pixelated rounded-2xl"
             >
               <div className="space-y-4">
                 <p className="text-primary-500 pixelated jersey10 text-2xl mb-4">

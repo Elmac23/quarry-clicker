@@ -24,6 +24,7 @@ const persistConfig = {
     "settings",
     "smelt",
     "farm",
+    "buffs",
   ],
 };
 

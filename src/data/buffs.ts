@@ -102,21 +102,21 @@ export const BUFFS = {
 
   // Smelting Speed Effects
   smeltingEffect: {
-    name: "Smelting Speed",
+    name: "Smelting",
     type: "smeltingSpeed",
     duration: 60,
     value: 100, // 30% faster smelting
     icon: "/sprites/ui/Smelting.png",
   },
   greaterSmeltingEffect: {
-    name: "Smelting Speed II",
+    name: "Smelting II",
     type: "smeltingSpeed",
     duration: 180,
     value: 300, // 50% faster smelting
     icon: "/sprites/ui/Smelting.png",
   },
   supremeSmeltingEffect: {
-    name: "Smelting Speed III",
+    name: "Smelting III",
     type: "smeltingSpeed",
     duration: 300,
     value: 1000, // 75% faster smelting

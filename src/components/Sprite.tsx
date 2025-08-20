@@ -9,8 +9,9 @@ function Sprite({ alt, width, height, className, ...rest }: SpriteProps) {
     <Image
       draggable={false}
       className={cn("block w-full pixelated select-none", className)}
-      height={height ?? 100}
+      height={height ?? 64}
       width={width ?? 64}
+      priority
       unoptimized
       alt={alt}
       {...rest}

@@ -27,7 +27,7 @@ function GameWrapper({ children }: React.PropsWithChildren) {
         value: Math.max(topCps, cps),
       })
     );
-    if (cps > 15) {
+    if (cps > 20) {
       navigator.push("/anticheat");
     }
   }, [cps]);

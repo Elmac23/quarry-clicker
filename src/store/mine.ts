@@ -9,8 +9,8 @@ interface MineState {
 }
 
 const initialState: MineState = {
-  activeMine: "coalMine",
-  health: MINES["coalMine"].health,
+  activeMine: "beginnersShaft",
+  health: MINES["beginnersShaft"].health,
 };
 
 export const mineSlice = createSlice({

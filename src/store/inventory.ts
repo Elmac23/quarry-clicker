@@ -6,6 +6,7 @@ import {
   TypedItemWithQuantity,
   ItemUpgradeKey,
   ItemConsumableKey,
+  ItemDrillKey,
 } from "@/data/items";
 import { useAppSelector } from "@/hooks/redux";
 import { computeChance } from "@/lib/computeChance";
@@ -13,31 +14,26 @@ import { randomRange } from "@/lib/randomRange";
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
-type ItemArray = Array<null | TypedItemWithQuantity>;
+export type ItemArray = Array<null | TypedItemWithQuantity>;
 
-interface InventoryState {
+export interface InventoryState {
   items: ItemArray;
   maxStackSize: number;
-  size: number;
-  selectedPickaxe: ItemPickaxeKey;
+  selectedTool: ItemPickaxeKey | ItemDrillKey;
   craftedPickaxes: ItemPickaxeKey[];
   craftedUpgrades: ItemUpgradeKey[];
   criticalChance: number;
 }
 
-const INITIAL_SIZE = 100;
-const INITIAL_MAX_STACK = 40;
+const INITIAL_SIZE = 20;
+const INITIAL_MAX_STACK = 30;
 
 const START_INVENTORY: ItemArray = Array(INITIAL_SIZE).fill(null);
 START_INVENTORY[0] = { id: "woodenPickaxe", quantity: 1 };
-START_INVENTORY[1] = { id: "stone", quantity: 10 };
-START_INVENTORY[2] = { id: "platinumOre", quantity: 10 };
-START_INVENTORY[3] = { id: "coal", quantity: 10 };
 const initialState: InventoryState = {
   items: START_INVENTORY,
   maxStackSize: INITIAL_MAX_STACK,
-  size: INITIAL_SIZE,
-  selectedPickaxe: "woodenPickaxe",
+  selectedTool: "woodenPickaxe",
   craftedPickaxes: [],
   craftedUpgrades: [],
   criticalChance: 0,
@@ -52,14 +48,31 @@ export const inventorySlice = createSlice({
       action: PayloadAction<{ indexOne: number; indexTwo: number }>
     ) {
       const { indexOne, indexTwo } = action.payload;
-      if (indexOne < 0 || indexOne >= state.size) return state;
-      if (indexTwo < 0 || indexTwo >= state.size) return state;
+      if (indexOne < 0 || indexOne >= state.items.length) return state;
+      if (indexTwo < 0 || indexTwo >= state.items.length) return state;
 
-      const temp = state.items[indexOne];
-      state.items[indexOne] = state.items[indexTwo];
-      state.items[indexTwo] = temp;
+      const itemOne = state.items[indexOne];
+      const itemTwo = state.items[indexTwo];
 
-      return state;
+      if (itemOne?.id !== itemTwo?.id || !itemOne || !itemTwo) {
+        const temp = state.items[indexOne];
+        state.items[indexOne] = state.items[indexTwo];
+        state.items[indexTwo] = temp;
+
+        return state;
+      }
+
+      const swappedQuantity = Math.min(
+        itemOne.quantity,
+        state.maxStackSize - itemTwo.quantity
+      );
+
+      state.items[indexOne]!.quantity -= swappedQuantity;
+      state.items[indexTwo]!.quantity += swappedQuantity;
+
+      if (!state.items[indexOne]?.quantity) {
+        state.items[indexOne] = null;
+      }
     },
 
     deleteItemAtIndex(state, action: PayloadAction<number>) {
@@ -68,31 +81,30 @@ export const inventorySlice = createSlice({
     },
 
     activeItem(state, action: PayloadAction<ActiveItemKey>) {
-      if (ITEMS[action.payload].type === "pickaxe") {
-        state.selectedPickaxe = action.payload as ItemPickaxeKey;
+      const item = ITEMS[action.payload];
+      if (item.type === "pickaxe" || item.type === "drill") {
+        state.selectedTool = action.payload as ItemPickaxeKey;
         return state;
       }
 
-      if (ITEMS[action.payload].type === "upgrade") {
-        switch (action.payload as ItemUpgradeKey) {
-          case "criticalChanceUpgrade":
+      if (item.type === "upgrade") {
+        switch (ITEMS[action.payload as ItemUpgradeKey].effect) {
+          case "criticalChance":
             state.criticalChance += 2;
             break;
 
-          case "maxStackUpgrade":
+          case "maxStack":
             state.maxStackSize += 10;
             break;
 
-          case "moreInventory10Upgrade":
+          case "moreInventory10":
             const freeSpace10 = Array(10).fill(null);
             state.items = [...state.items, ...freeSpace10];
-            state.size += 10;
             break;
 
-          case "moreInventory20Upgrade":
+          case "moreInventory20":
             const freeSpace20 = Array(20).fill(null);
             state.items = [...state.items, ...freeSpace20];
-            state.size += 20;
             break;
         }
 
@@ -100,7 +112,7 @@ export const inventorySlice = createSlice({
         return state;
       }
 
-      if (ITEMS[action.payload].type === "consumable") {
+      if (item.type === "consumable") {
         const itemId = action.payload as ItemConsumableKey;
 
         switch (itemId) {
@@ -151,7 +163,6 @@ export const inventorySlice = createSlice({
     },
 
     addItem(state, action: PayloadAction<TypedItemWithQuantity>) {
-      console.log(action.type);
       const newState = addItemToInventory(state, action.payload);
       return newState;
     },
@@ -240,22 +251,25 @@ function removeItemFromInventory(
   quantity: number
 ) {
   let deleteAmount = quantity;
-  const newItemList = itemList.map((predicate) => {
-    if (!predicate) return null;
 
-    const { id, quantity } = predicate;
-    if (predicate.id === item) {
-      if (quantity > deleteAmount) {
-        return { id, quantity: quantity - deleteAmount };
-      } else {
-        deleteAmount -= quantity;
-        return null;
-      }
+  for (let i = 0; i < itemList.length; i++) {
+    if (!itemList[i]) continue;
+
+    const predicate = itemList[i]!;
+
+    if (predicate.id !== item) continue;
+
+    if (predicate.quantity > deleteAmount) {
+      predicate.quantity -= deleteAmount;
+      return itemList;
+    } else {
+      const temp = predicate.quantity;
+      itemList[i] = null;
+      deleteAmount -= temp;
     }
-    return { id, quantity };
-  });
+  }
 
-  return newItemList;
+  return itemList;
 }
 
 export const { addItem, removeItem, activeItem, deleteItemAtIndex, swapItems } =

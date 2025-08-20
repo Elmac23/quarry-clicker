@@ -1,3 +1,4 @@
+"use client";
 import { clearNotifications } from "@/store/notification";
 import React from "react";
 import Button from "../Button";

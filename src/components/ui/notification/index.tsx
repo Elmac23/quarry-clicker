@@ -14,10 +14,14 @@ function Notifiactions() {
   );
   return (
     <ul className="flex flex-col fixed right-4 md:bottom-4 gap-4 z-20 md:top-[unset] top-4">
-      <AnimatePresence mode="popLayout">
-        {notificationsTop3.map((el) => (
-          <Notification data={el} key={el.itemId + el.customMessage} />
-        ))}
+      <AnimatePresence>
+        {notificationsTop3.map((el) => {
+          let key = el.itemId;
+
+          if ("customMessage" in el) key += el.customMessage;
+          // if ("amount" in el) key += String(el.amount);
+          return <Notification data={el} key={key} />;
+        })}
       </AnimatePresence>
     </ul>
   );

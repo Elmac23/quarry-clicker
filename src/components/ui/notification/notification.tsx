@@ -17,6 +17,12 @@ export type NotificationProps = {
 function Notification({ data }: NotificationProps) {
   const dispatch = useAppDispatch();
 
+  let quantity: number | undefined = undefined;
+  let customMessage: string | undefined = undefined;
+
+  if ("amount" in data) quantity = data.amount;
+  if ("customMessage" in data) customMessage = data.customMessage;
+
   useInterval(() => dispatch(tick(data.itemId)), 1000);
   return (
     <motion.li
@@ -43,8 +49,8 @@ function Notification({ data }: NotificationProps) {
       <div className="flex-shrink-0 h-full">
         <ItemTile
           className="w-14 md:w-18"
-          itemId={data.itemId}
-          quantity={data.amount}
+          itemKey={data.itemId}
+          quantity={quantity}
         />
       </div>
       <Text
@@ -53,7 +59,7 @@ function Notification({ data }: NotificationProps) {
         color="primary"
         gutter={false}
       >
-        {data.customMessage ?? ITEMS[data.itemId].name}
+        {customMessage ?? ITEMS[data.itemId].name}
       </Text>
     </motion.li>
   );

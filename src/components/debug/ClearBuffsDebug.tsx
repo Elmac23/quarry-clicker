@@ -1,3 +1,5 @@
+"use client";
+
 import { useAppDispatch } from "@/hooks/redux";
 import { clearBuffs } from "@/store/buffs";
 import React from "react";

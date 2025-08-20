@@ -1,4 +1,7 @@
+"use client";
+
 import { useAppDispatch } from "@/hooks/redux";
+import { useAudio } from "@/hooks/useAudio";
 import { useKeyButton } from "@/hooks/useKeyButton";
 import { cn } from "@/lib/cn";
 import { setModal } from "@/store/modal";
@@ -12,7 +15,12 @@ type MenuButtonProps = React.PropsWithChildren & {
 
 function MenuButton({ children, modalId, isActive, keybind }: MenuButtonProps) {
   const dispatch = useAppDispatch();
+  const clickAudio = useAudio(
+    "288911__littlerobotsoundfactory__click_soft_01.wav",
+    0.8
+  );
   const handleChangeModal = function () {
+    clickAudio.play();
     dispatch(setModal(isActive ? -1 : modalId));
   };
 

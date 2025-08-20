@@ -1,3 +1,4 @@
+"use client";
 import { useMines } from "@/store/mine";
 import React from "react";
 

@@ -1,5 +1,3 @@
-"use client";
-
 import BottomMenu from "@/components/ui/menu";
 import Ore from "@/components/ui/ore";
 
@@ -10,27 +8,22 @@ import BuffsDebug from "@/components/debug/BuffsDebug";
 import ClearNottificationsDebug from "@/components/debug/ClearNottificationsDebug";
 import ClearBuffsDebug from "@/components/debug/ClearBuffsDebug";
 import MineDataDebug from "@/components/debug/MineDataDebug";
-import { useSmeltTick } from "@/hooks/useSmeltTick";
-import { useBuffTick } from "@/hooks/useBuffTick";
-import { useBackgroundMusic } from "@/hooks/useBackgroundMusic";
-
+import GameWrapper from "./GameWrapper";
 export default function Home() {
-  useBackgroundMusic();
-  useSmeltTick();
-  useBuffTick();
-
   return (
     <main className="relative">
-      <BG time={30} />
-      <MineDataDebug />
+      <GameWrapper>
+        <BG time={30} />
+        <MineDataDebug />
+        <ClearNottificationsDebug />
+        <ClearBuffsDebug />
+        <AddAllItemsDebug />
 
-      <ClearNottificationsDebug />
-      <ClearBuffsDebug />
-      <AddAllItemsDebug />
-      <BuffsDebug />
-      <Ore />
-      <Notifiactions />
-      <BottomMenu />
+        <BuffsDebug />
+        <Ore />
+        <Notifiactions />
+        <BottomMenu />
+      </GameWrapper>
     </main>
   );
 }

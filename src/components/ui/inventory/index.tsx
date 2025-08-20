@@ -2,7 +2,7 @@
 
 import { ItemKey, ITEMS, TypedItemWithQuantity } from "@/data/items";
 
-import React, { useRef, useState, useCallback, useMemo } from "react";
+import React, { useRef, useState, useCallback, useMemo, memo } from "react";
 import { ModalProps } from "@/components/modal";
 import UIModal from "@/components/modal/UIModal";
 import ItemGrid from "../ItemGrid";
@@ -23,7 +23,7 @@ type InventoryModalProps = Pick<ModalProps, "isOpen" | "onClose">;
 function Inventory({ isOpen, onClose }: InventoryModalProps) {
   const [selectedItem, setSelectedItem] = useState<null | ItemKey>(null);
   const containerRef = useRef<HTMLUListElement>(null);
-  const { items, selectedPickaxe } = useInventory();
+  const { items, selectedTool } = useInventory();
   const dispatch = useAppDispatch();
   const mouseSensor = useSensor(MouseSensor);
   const touchSensor = useSensor(TouchSensor);
@@ -51,15 +51,31 @@ function Inventory({ isOpen, onClose }: InventoryModalProps) {
   const renderItem = useCallback(
     (item: TypedItemWithQuantity | null, index: number) => (
       <InventoryItem
-        selectedPickaxe={selectedPickaxe}
+        selectedTool={selectedTool}
         index={index}
         item={item}
         setSelectedItem={memoizedSetSelectedItem}
         key={index}
       />
     ),
-    [memoizedSetSelectedItem, selectedPickaxe]
+    [memoizedSetSelectedItem, selectedTool]
   );
+
+  const getDescription = () => {
+    if (selectedItem && ITEMS[selectedItem].description) {
+      if (
+        ITEMS[selectedItem].type === "pickaxe" ||
+        ITEMS[selectedItem].type === "drill"
+      ) {
+        const dmg = ITEMS[selectedItem].damage;
+        return `(${dmg} damage) | ${ITEMS[selectedItem].description}`;
+      }
+      if (ITEMS[selectedItem].type === "upgrade") {
+        return `(Right Click to Activate) | ${ITEMS[selectedItem].description}`;
+      }
+      return ITEMS[selectedItem].description;
+    }
+  };
 
   return (
     <UIModal
@@ -74,7 +90,9 @@ function Inventory({ isOpen, onClose }: InventoryModalProps) {
       <Text size="xl" color="primary">
         Inventory {selectedItem && `| ${ITEMS[selectedItem].name}`}
       </Text>
-      <Text size="lg">{selectedItem && ITEMS[selectedItem].description}</Text>
+      <Text size="lg" className="min-h-8">
+        {getDescription()}
+      </Text>
       <DndContext
         sensors={sensors}
         onDragEnd={handleDragEnd}
@@ -97,4 +115,4 @@ function Inventory({ isOpen, onClose }: InventoryModalProps) {
   );
 }
 
-export default Inventory;
+export default memo(Inventory);

@@ -10,6 +10,9 @@ import { addItem, SmeltPosition, useSmelt } from "@/store/smelt";
 import SmeltingItem from "./SmeltingItem";
 import SmeltedItem from "./SmeltedItem";
 import Text from "@/components/Text";
+import { useAudio } from "@/hooks/useAudio";
+import Tooltip from "@/components/Tooltip";
+import Sprite from "@/components/Sprite";
 
 type SmeltingModalProps = Pick<ModalProps, "isOpen" | "onClose">;
 
@@ -19,6 +22,7 @@ function Smelting({ isOpen, onClose }: SmeltingModalProps) {
   const { isFull, smeltPositions } = useSmelt();
 
   const dispatch = useAppDispatch();
+  const clickSound = useAudio("577025__nezuai__ui-sound-2.wav", 0.5);
 
   const ores = useMemo(() => {
     return items.filter((item) => item && ITEMS[item?.id].type === "smeltable");
@@ -35,45 +39,48 @@ function Smelting({ isOpen, onClose }: SmeltingModalProps) {
         </Text>
       )}
 
-      <div className="grid grid-fluid md:grid-fluid-lg gap-4 pb-4 mb-4 border-b-4 border-b-black/30">
-        {smeltPositions.length &&
-          smeltPositions.map((item, index) => getSmeltPosition(item, index))}
-      </div>
+      <ul className="grid grid-fluid md:grid-fluid-lg gap-4 pb-4 mb-4 border-b-4 border-b-black/30">
+        {smeltPositions.map((item, index) => getSmeltPosition(item, index))}
+      </ul>
       <div className="flex flex-row gap-4">
         <ItemGrid
-          className="w-full"
+          className="w-full overflow-visible"
           data={ores}
-          renderItem={(ore, index) => (
-            <ItemTile
-              key={index}
-              itemId={ore?.id}
-              quantity={ore?.quantity}
-              onClick={() => {
-                if (isFull || coalQuantity < 1) return;
-                dispatch(
-                  addItem({
-                    item: ore.id as ItemOreKey,
-                  })
-                );
-                dispatch(
-                  removeItem({
-                    item: ore.id,
-                    amount: 1,
-                  })
-                );
+          renderItem={(ore, index) => {
+            return (
+              <Tooltip key={index} content={ITEMS[ore.id].name}>
+                <ItemTile
+                  itemKey={ore?.id}
+                  quantity={ore?.quantity}
+                  onClick={() => {
+                    if (isFull || coalQuantity < 1) return;
+                    clickSound.play();
+                    dispatch(
+                      addItem({
+                        item: ore.id as ItemOreKey,
+                      })
+                    );
+                    dispatch(
+                      removeItem({
+                        item: ore.id,
+                        amount: 1,
+                      })
+                    );
 
-                dispatch(
-                  removeItem({
-                    item: "coal",
-                    amount: 1,
-                  })
-                );
-              }}
-            />
-          )}
+                    dispatch(
+                      removeItem({
+                        item: "coal",
+                        amount: 1,
+                      })
+                    );
+                  }}
+                />
+              </Tooltip>
+            );
+          }}
         />
         <ItemTile
-          itemId={"coal"}
+          itemKey={"coal"}
           quantityText={`${coalQuantity}`}
           className="h-20"
         />
@@ -83,7 +90,16 @@ function Smelting({ isOpen, onClose }: SmeltingModalProps) {
 }
 
 function getSmeltPosition(item: SmeltPosition | null, index: number) {
-  if (!item) return <ItemTile key={index} />;
+  if (!item)
+    return (
+      <ItemTile as="li" key={index}>
+        <Sprite
+          className="w-13/15"
+          src="/sprites/ui/EmptyBar.png"
+          alt="Bar outline"
+        />
+      </ItemTile>
+    );
   if (item.isDone) return <SmeltedItem index={index} key={index} item={item} />;
 
   return <SmeltingItem index={index} key={index} item={item} />;

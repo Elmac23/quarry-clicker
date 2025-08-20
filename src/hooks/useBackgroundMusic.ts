@@ -15,8 +15,6 @@ export function useBackgroundMusic() {
     return themes[randomRange(0, themes.length - 1)];
   }, []);
 
-  console.log(randomTheme);
-
   const { play } = useAudio(randomTheme[0], randomTheme[1], "music");
 
   const hasInteracted = useInterracted();

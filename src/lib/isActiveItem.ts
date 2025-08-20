@@ -1,7 +1,12 @@
-import { ITEMS, type ItemKey } from "../data/items";
+import { ITEMS, ItemType, type ItemKey } from "../data/items";
 
 export function isActiveItem(item: ItemKey) {
-  return ["pickaxe", "potion", "upgrade", "consumable"].includes(
-    ITEMS[item].type
-  );
+  const activeTypes: ItemType[] = [
+    "pickaxe",
+    "potion",
+    "upgrade",
+    "consumable",
+    "drill",
+  ];
+  return activeTypes.includes(ITEMS[item].type);
 }

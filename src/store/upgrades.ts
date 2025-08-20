@@ -8,7 +8,20 @@ interface UpgradesState {
 }
 
 const initialState: UpgradesState = {
-  ownedUpgrades: [],
+  ownedUpgrades: [
+    "permitAlpha",
+    "permitBeta",
+    "permitBeta",
+    "permitDelta",
+    "permitEpsilon",
+    "permitGamma",
+    "permitKappa",
+    "permitOmega",
+    "permitTheta",
+    "permitZeta",
+    // "silverTray",
+    // "palladiumWateringCan",
+  ],
 };
 
 export const upgradeSlice = createSlice({

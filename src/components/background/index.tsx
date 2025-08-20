@@ -4,9 +4,11 @@ import React, { useCallback, useContext, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { computeChance } from "@/lib/computeChance";
 import { BG_DATA } from "@/data/bg";
-import BackGround from "./Background";
+import Background from "./Background";
 import { useAppSelector } from "@/hooks/redux";
 import { useMounted } from "@/hooks/useMounted";
+import { MineKey } from "@/data/mines";
+import { cn } from "@/lib/cn";
 
 type BgProps = {
   time: number;
@@ -33,6 +35,16 @@ function BG({ time }: BgProps) {
   const mine = useAppSelector((state) => state.mine.activeMine);
   const isMounted = useMounted();
 
+  const stoneMines: MineKey[] = [
+    "beginnersShaft",
+    "crimsonShaft",
+    "metalGalore",
+  ];
+  const graphiteMines: MineKey[] = ["shaftOfUnpaintment", "heavyMetalCave"];
+  const paleStoneMines: MineKey[] = ["caveOfFortune", "paleShaft"];
+  const deepgritMines: MineKey[] = ["deepgritMine"];
+  const obsidianMines: MineKey[] = ["mysticave", "alternateDimension"];
+
   const generateRandomBg = useCallback(() => {
     const { entities, standard } = BG_DATA[mine];
     const fun = computeChance(entities, standard);
@@ -51,7 +63,18 @@ function BG({ time }: BgProps) {
   const yAmount = Math.ceil(height / elementSize);
 
   return createPortal(
-    <div className="w-full h-screen overflow-hidden bg-[#6D6D6D] select-none absolute inset-0 z-[-1]">
+    <div
+      className={cn(
+        "w-full h-screen overflow-hidden select-none absolute inset-0 z-[-1]",
+        {
+          "bg-[#6D6D6D]": stoneMines.includes(mine),
+          "bg-[#211e4e]": obsidianMines.includes(mine),
+          "bg-[#371f24]": deepgritMines.includes(mine),
+          "bg-[#8f8f8f]": paleStoneMines.includes(mine),
+          "bg-[#5f5f5f]": graphiteMines.includes(mine),
+        }
+      )}
+    >
       <backgroundContext.Provider
         value={{
           getBg: generateRandomBg,
@@ -60,7 +83,7 @@ function BG({ time }: BgProps) {
           yAmount,
         }}
       >
-        <BackGround />
+        <Background />
       </backgroundContext.Provider>
     </div>,
     document.body

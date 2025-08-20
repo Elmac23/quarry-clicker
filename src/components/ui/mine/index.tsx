@@ -1,4 +1,3 @@
-import ItemTile from "@/components/ItemTile";
 import { ModalProps } from "@/components/modal";
 import UIModal from "@/components/modal/UIModal";
 import Text from "@/components/Text";
@@ -6,6 +5,7 @@ import { useAppDispatch } from "@/hooks/redux";
 import { useMinesDisplayData } from "@/hooks/useMinesDisplayData";
 import { changeMine } from "@/store/mine";
 import { close } from "@/store/modal";
+import MineItem from "./MineItem";
 
 type QuestModalProps = Pick<ModalProps, "isOpen" | "onClose">;
 
@@ -31,16 +31,13 @@ function Mine({ isOpen, onClose }: QuestModalProps) {
               dispatch(close());
             }}
           >
-            <h2 className="jersey10 mb-2 text-2xl text-white">{mine.name}</h2>
+            <Text size="lg">
+              {mine.name} | {mine.health}hp
+            </Text>
             <div className="grid grid-fluid w-full gap-4">
-              <ItemTile itemId={mine.standard} className="min-h-18" />
+              <MineItem id={mine.standard} />
               {mine.drops.map((drop) => (
-                <ItemTile
-                  key={drop.id}
-                  itemId={drop.id}
-                  quantityText={drop.label}
-                  className="min-h-18"
-                />
+                <MineItem key={drop.id} id={drop.id} label={drop.label} />
               ))}
             </div>
           </li>

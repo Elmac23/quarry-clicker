@@ -1,3 +1,5 @@
+"use client";
+
 import Sprite from "@/components/Sprite";
 import { MINES } from "@/data/mines";
 import { useAppDispatch } from "@/hooks/redux";
@@ -10,11 +12,12 @@ import { chancesFromMine } from "@/lib/chancesFromMine";
 import { getSpriteId } from "@/lib/getSpriteId";
 import { randomRange } from "@/lib/randomRange";
 import { useCheckBuff } from "@/store/buffs";
-import { addItem } from "@/store/inventory";
+import { addItem, useInventory } from "@/store/inventory";
 import { dealDamage, resetHealth, useMines } from "@/store/mine";
 import { motion } from "motion/react";
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useSettings } from "@/store/settings";
+import { ITEMS } from "@/data/items";
 
 function Ore() {
   const dispatch = useAppDispatch();
@@ -27,8 +30,14 @@ function Ore() {
   const digAudio = useAudio("pickaxe-blow-333695.mp3", 0.5);
   const diggedAudio = useAudio("digged2.wav", 1);
   const damage = useCalculateDamage();
+  const { selectedTool } = useInventory();
+  const item = ITEMS[selectedTool];
 
-  const handleClick = () => {
+  useEffect(() => {
+    setSpriteId(0);
+  }, [mine]);
+
+  const handleClick = useCallback(() => {
     const fortuneValue = fortuneBuff?.value ?? 0;
     const lootAmount = randomRange(0, 100) < fortuneValue ? 2 : 1;
     const newHealth = health - damage;
@@ -56,18 +65,27 @@ function Ore() {
       );
     } else {
     }
-  };
+  }, [
+    damage,
+    digAudio,
+    diggedAudio,
+    dispatch,
+    fortuneBuff?.value,
+    getDrop,
+    health,
+    mine,
+  ]);
 
   useKeyButton(" ", handleClick);
 
-  // const [start, stop] = useInterval(
-  //   () => {
-  //     handleClick();
-  //   },
-  //   150,
-  //   [handleClick],
-  //   false
-  // );
+  const [start, stop] = useInterval(
+    () => {
+      handleClick();
+    },
+    200,
+    [handleClick],
+    false
+  );
 
   return (
     <motion.div
@@ -93,13 +111,12 @@ function Ore() {
     >
       <Sprite
         className="pixelated bg-center bg-cover bg-no-repeat"
-        onClick={handleClick}
+        onClick={item.type === "pickaxe" ? handleClick : undefined}
         src={`sprites/ui/${MINES[mine].oreSprites[spriteId]}`}
         alt={mine}
-        //drill
-        // onMouseDown={start}
-        // onMouseUp={stop}
-        // onMouseLeave={stop}
+        onMouseDown={item.type === "drill" ? start : undefined}
+        onMouseUp={item.type === "drill" ? stop : undefined}
+        onMouseLeave={item.type === "drill" ? stop : undefined}
       />
     </motion.div>
   );

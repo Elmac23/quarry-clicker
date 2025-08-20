@@ -6,6 +6,7 @@ import { activeItem } from "./inventory";
 
 export type SmeltPosition = {
   result: ItemKey;
+  quantity: number;
   timeLeft: number;
   isDone: boolean;
   totalTime: number;
@@ -31,13 +32,13 @@ export const smeltSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(activeItem, (state, action) => {
       if (ITEMS[action.payload].type === "upgrade")
-        switch (action.payload as ItemUpgradeKey) {
-          case "furnaceNewUpgrade":
+        switch (ITEMS[action.payload as ItemUpgradeKey].effect) {
+          case "furnaceNew":
             state.maxSmelters++;
             state.smeltPositions.push(null);
             break;
 
-          case "furnaceSpeedUpgrade":
+          case "furnaceSpeed":
             state.speed += 0.15;
             break;
         }
@@ -78,15 +79,16 @@ export const smeltSlice = createSlice({
 
       const freeIndex = state.smeltPositions.findIndex((el) => !el);
 
-      const result = ITEMS[action.payload.item].result.id;
+      const { id, quantity } = ITEMS[action.payload.item].result;
 
-      if (!result) return state;
+      if (!id) return state;
 
       const timer = ITEMS[action.payload.item].smeltTime;
 
       state.smeltPositions[freeIndex] = {
         isDone: false,
-        result,
+        result: id,
+        quantity,
         timeLeft: timer,
         totalTime: timer,
       };
@@ -99,9 +101,7 @@ export const { tick, addItem, clearPosition, speedUp } = smeltSlice.actions;
 export const useSmelt = () => {
   const data = useAppSelector((state) => state.smelt);
   const isFull = data.smeltPositions.every((position) => !!position);
-  const isIdle = data.smeltPositions.every(
-    (position) => !position || position.isDone
-  );
+  const isIdle = data.smeltPositions.every((position) => !position);
   return { ...data, isFull, isEmpty: isIdle };
 };
 

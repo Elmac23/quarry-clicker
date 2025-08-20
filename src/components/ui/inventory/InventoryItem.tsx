@@ -1,14 +1,16 @@
 import ItemTile from "@/components/ItemTile";
 import {
   ActiveItemKey,
+  ItemDrillKey,
   ItemKey,
   ItemPickaxeKey,
   ITEMS,
+  ItemType,
   TypedItemWithQuantity,
 } from "@/data/items";
 import { useAppDispatch } from "@/hooks/redux";
 
-import { activeItem } from "@/store/inventory";
+import { activeItem, removeItem } from "@/store/inventory";
 import React, { useState } from "react";
 import { SetStateAction, useCallback } from "react";
 import DraggableWrapper from "./DraggableWrapper";
@@ -21,7 +23,7 @@ import { useAudio } from "@/hooks/useAudio";
 type InventoryItemProps = {
   item: TypedItemWithQuantity | null;
   index: number;
-  selectedPickaxe: ItemPickaxeKey;
+  selectedTool: ItemPickaxeKey | ItemDrillKey;
   setSelectedItem: React.Dispatch<SetStateAction<ItemKey | null>>;
 };
 
@@ -29,12 +31,13 @@ function InventoryItem({
   item,
   index,
   setSelectedItem,
-  selectedPickaxe,
+  selectedTool,
 }: InventoryItemProps) {
   const dispatch = useAppDispatch();
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const { value, setFalse, setTrue } = useToggle(false);
   const potionAudio = useAudio("085594_potion-35983.mp3");
+  const clickSound = useAudio("577025__nezuai__ui-sound-2.wav", 0.5);
 
   const handleMouseEnter = useCallback(() => {
     if (item) setSelectedItem(item.id);
@@ -43,14 +46,24 @@ function InventoryItem({
   const handleContextMenu = useCallback(
     (e: React.MouseEvent) => {
       e.preventDefault();
+      clickSound.play();
       setTrue();
       setPosition({
         x: e.clientX,
         y: e.clientY,
       });
     },
-    [setTrue]
+    [clickSound.play, clickSound.pause]
   );
+
+  const removableTypes: ItemType[] = [
+    "consumable",
+    "material",
+    "material",
+    "plantable",
+    "potion",
+    "smeltable",
+  ];
 
   return (
     <DraggableWrapper id={index} disabled={!item}>
@@ -60,8 +73,8 @@ function InventoryItem({
             containerProps={containerProps}
             onContextMenu={item ? handleContextMenu : undefined}
             quantity={item?.quantity}
-            itemId={item?.id}
-            background={item?.id === selectedPickaxe ? "selected" : undefined}
+            itemKey={item?.id}
+            background={item?.id === selectedTool ? "selected" : undefined}
             onMouseEnter={handleMouseEnter}
           />
           {item && (
@@ -80,6 +93,7 @@ function InventoryItem({
                     className="w-full"
                     onClick={async (e) => {
                       e.stopPropagation();
+                      clickSound.play();
                       dispatch(activeItem(item.id as ActiveItemKey));
                       if (ITEMS[item.id].type === "potion") potionAudio.play();
                       setFalse();
@@ -88,9 +102,22 @@ function InventoryItem({
                     Use
                   </Button>
                 )}
-                <Button className="w-full" onClick={(e) => e.stopPropagation()}>
-                  Sell
-                </Button>
+                {removableTypes.includes(ITEMS[item.id].type) && (
+                  <Button
+                    className="w-full"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      dispatch(
+                        removeItem({
+                          amount: item.quantity,
+                          item: item.id,
+                        })
+                      );
+                    }}
+                  >
+                    Remove Stack
+                  </Button>
+                )}
               </div>
             </ContextMenu>
           )}

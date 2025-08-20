@@ -6,11 +6,17 @@ import { activeItem, addItem } from "./inventory";
 
 const NOTIFICATION_DURATION = 5;
 
-export type Notification = {
+export type NotificationWithAmount = {
   itemId: ItemKey;
   amount: number;
-  customMessage?: string;
 };
+
+export type NotificationWithCustomText = {
+  itemId: ItemKey;
+  customMessage: string;
+};
+
+export type Notification = NotificationWithCustomText | NotificationWithAmount;
 
 export type NotificationWithTimer = Notification & {
   timer: number;
@@ -42,8 +48,8 @@ export const notificationSlice = createSlice({
         });
         return state;
       }
-
-      existingNotification.amount += action.payload.quantity;
+      if ("amount" in existingNotification)
+        existingNotification.amount += action.payload.quantity;
       existingNotification.timer = NOTIFICATION_DURATION;
 
       return state;
@@ -72,59 +78,62 @@ export const notificationSlice = createSlice({
         case "permitAlpha":
         case "permitBeta":
         case "permitGamma":
-        case "permitSigma":
+        case "permitDelta":
+        case "permitEpsilon":
+        case "permitKappa":
+        case "permitTheta":
+        case "permitZeta":
         case "permitOmega":
           state.notifications.push({
             itemId: "gear",
             customMessage: "Unlocked new Mine!",
             timer: NOTIFICATION_DURATION,
-            amount: 0,
           });
           break;
 
-        case "furnaceNewUpgrade":
-          state.notifications.push({
-            itemId: "gear",
-            customMessage: "Unlocked new Furnace!",
-            timer: NOTIFICATION_DURATION,
-            amount: 0,
-          });
-          break;
+        //   case "furnaceNewUpgrade":
+        //     state.notifications.push({
+        //       itemId: "gear",
+        //       customMessage: "Unlocked new Furnace!",
+        //       timer: NOTIFICATION_DURATION,
+        //       amount: 0,
+        //     });
+        //     break;
 
-        case "furnaceSpeedUpgrade":
-          state.notifications.push({
-            itemId: "gear",
-            customMessage: "Furnaces 15% faster!",
-            timer: NOTIFICATION_DURATION,
-            amount: 0,
-          });
-          break;
+        //   case "furnaceSpeedUpgrade":
+        //     state.notifications.push({
+        //       itemId: "gear",
+        //       customMessage: "Furnaces 15% faster!",
+        //       timer: NOTIFICATION_DURATION,
+        //       amount: 0,
+        //     });
+        //     break;
 
-        case "moreInventory10Upgrade":
-          state.notifications.push({
-            itemId: "gear",
-            customMessage: "+10 Inventory Slots!",
-            timer: NOTIFICATION_DURATION,
-            amount: 0,
-          });
-          break;
+        //   case "moreInventory10Upgrade":
+        //     state.notifications.push({
+        //       itemId: "gear",
+        //       customMessage: "+10 Inventory Slots!",
+        //       timer: NOTIFICATION_DURATION,
+        //       amount: 0,
+        //     });
+        //     break;
 
-        case "moreInventory20Upgrade":
-          state.notifications.push({
-            itemId: "gear",
-            customMessage: "+20 Inventory Slots!",
-            timer: NOTIFICATION_DURATION,
-            amount: 0,
-          });
-          break;
-        case "maxStackUpgrade":
-          state.notifications.push({
-            itemId: "gear",
-            customMessage: "+10 Inventory Stack Size!",
-            timer: NOTIFICATION_DURATION,
-            amount: 0,
-          });
-          break;
+        //   case "moreInventory20Upgrade":
+        //     state.notifications.push({
+        //       itemId: "gear",
+        //       customMessage: "+20 Inventory Slots!",
+        //       timer: NOTIFICATION_DURATION,
+        //       amount: 0,
+        //     });
+        //     break;
+        //   case "maxStackUpgrade":
+        //     state.notifications.push({
+        //       itemId: "gear",
+        //       customMessage: "+10 Inventory Stack Size!",
+        //       timer: NOTIFICATION_DURATION,
+        //       amount: 0,
+        //     });
+        //     break;
       }
     });
   },
@@ -157,7 +166,8 @@ export const notificationSlice = createSlice({
         return state;
       }
 
-      existingNotification.amount += action.payload.amount;
+      if ("amount" in existingNotification && "amount" in action.payload)
+        existingNotification.amount += action.payload.amount;
       existingNotification.timer = 5;
 
       return state;

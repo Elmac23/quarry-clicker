@@ -10,10 +10,13 @@ import {
 import { useMemo } from "react";
 import { incrementStat } from "@/store/stats";
 import { useUpgrades } from "@/store/upgrades";
+import { canAddToInventory } from "@/lib/canAddToInventory";
 
 export function useCrafting() {
+  const inventoryState = useInventory();
+
   const { items, craftedPickaxes, craftedUpgrades, maxStackSize } =
-    useInventory();
+    inventoryState;
   const { ownedUpgrades } = useUpgrades();
   const dispatch = useAppDispatch();
 
@@ -47,16 +50,10 @@ export function useCrafting() {
         continue;
       }
 
-      let canCraft = true;
-
-      const freeIndex = items.findIndex((item) => !item);
-
-      const resultInInventory = items.find(
-        (item) =>
-          item?.id === result && maxStackSize - item.quantity <= quantity
+      let canCraft = canAddToInventory(
+        { id: result, quantity },
+        inventoryState
       );
-
-      if (freeIndex === -1 && !resultInInventory) canCraft = false;
 
       const ingredients = recipe.map((predicate) => {
         const totalItemInInventory = items.reduce((prev, curr) => {

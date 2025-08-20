@@ -8,6 +8,7 @@ import smeltReducer from "./smelt";
 import buffReducer from "./buffs";
 import upgradesReducer from "./upgrades";
 import settingsReducer from "./settings";
+import farmReducer from "./farm";
 import storage from "redux-persist/lib/storage";
 import { persistReducer, persistStore } from "redux-persist";
 import { combineReducers } from "@reduxjs/toolkit";
@@ -22,6 +23,7 @@ const persistConfig = {
     "mine",
     "settings",
     "smelt",
+    "farm",
   ],
 };
 
@@ -35,6 +37,7 @@ const rootReducer = combineReducers({
   smelt: smeltReducer,
   buffs: buffReducer,
   upgrades: upgradesReducer,
+  farm: farmReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

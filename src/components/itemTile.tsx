@@ -1,3 +1,5 @@
+"use client";
+
 import { ItemKey, ITEMS } from "@/data/items";
 import { cn } from "@/lib/cn";
 import { cva, VariantProps } from "class-variance-authority";
@@ -25,7 +27,7 @@ const itemTileVariants = cva(
 
 type ItemTileProps = Omit<React.ComponentProps<"div">, "as"> &
   VariantProps<typeof itemTileVariants> & {
-    itemId?: ItemKey | null;
+    itemKey?: ItemKey | null;
     quantity?: number;
     counter?: number;
     quantityText?: string;
@@ -35,7 +37,7 @@ type ItemTileProps = Omit<React.ComponentProps<"div">, "as"> &
   };
 
 function ItemTile({
-  itemId,
+  itemKey,
   quantity,
   counter,
   className,
@@ -43,6 +45,7 @@ function ItemTile({
   quantityText,
   onContextMenu,
   containerProps,
+  children,
   as = "div",
   ...rest
 }: ItemTileProps) {
@@ -52,16 +55,18 @@ function ItemTile({
 
   return (
     <Component
-      className={cn(itemTileVariants({ background }), className)}
+      className={cn(itemTileVariants({ background }), "grid-center", className)}
       onContextMenu={onContextMenu ?? handleRightClick}
       {...rest}
     >
-      {itemId && (
-        <div className="relative grid grid-center" {...containerProps}>
+      {children && children}
+
+      {itemKey && (
+        <div className="relative grid-center w-full" {...containerProps}>
           <Sprite
-            className="aspect-square w-14/15"
-            alt={ITEMS[itemId].name}
-            src={ITEMS[itemId].icon}
+            className="aspect-square w-13/15"
+            alt={ITEMS[itemKey].name}
+            src={ITEMS[itemKey].icon}
           />
           <Text
             className="absolute md:right-3 right-1 bottom-[-2] text-shadow-lg select-none"

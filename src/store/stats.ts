@@ -3,12 +3,15 @@ import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { dealDamage, resetHealth } from "./mine";
 import { speedUp } from "./smelt";
+import { clearPosition } from "./farm";
 
 interface StatisticsState {
   totalClicks: number;
   totalSmelted: number;
   totalCrafted: number;
   totalMined: number;
+  totalPlantsCollected: number;
+  topCps: number;
 }
 
 type StatKeys = keyof StatisticsState;
@@ -17,7 +20,9 @@ const initialState: StatisticsState = {
   totalClicks: 0,
   totalSmelted: 0,
   totalCrafted: 0,
+  totalPlantsCollected: 0,
   totalMined: 0,
+  topCps: 0,
 };
 
 export const statisticsSlice = createSlice({
@@ -35,6 +40,10 @@ export const statisticsSlice = createSlice({
 
     builder.addCase(speedUp, (state) => {
       state.totalClicks++;
+    });
+
+    builder.addCase(clearPosition, (state) => {
+      state.totalPlantsCollected++;
     });
   },
 

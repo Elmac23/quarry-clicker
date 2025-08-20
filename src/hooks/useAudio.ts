@@ -1,5 +1,8 @@
+"use client";
 import { useSettings } from "@/store/settings";
 import { useRef, useEffect, useCallback } from "react";
+
+const audioCache = new Map<string, HTMLAudioElement>();
 
 export function useAudio(
   fileName: string,
@@ -10,11 +13,23 @@ export function useAudio(
   const { isMusic, isSfx, volume: settingsVolume } = useSettings();
 
   useEffect(() => {
-    audioRef.current = new Audio(`sound/${fileName}`);
-    audioRef.current.loop = sfxType === "music";
+    const audioPath = `sound/${fileName}`;
+
+    if (sfxType === "music") {
+      audioRef.current = new Audio(audioPath);
+      audioRef.current.loop = true;
+      audioRef.current.preload = "auto";
+    } else {
+      if (!audioCache.has(audioPath)) {
+        const audio = new Audio(audioPath);
+        audio.preload = "auto";
+        audioCache.set(audioPath, audio);
+      }
+      audioRef.current = audioCache.get(audioPath)!;
+    }
 
     return () => {
-      if (audioRef.current) {
+      if (sfxType === "music" && audioRef.current) {
         audioRef.current.pause();
         audioRef.current = null;
       }
@@ -26,6 +41,7 @@ export function useAudio(
 
     const shouldBeMuted =
       (sfxType === "music" && !isMusic) || (sfxType === "sfx" && !isSfx);
+
     audioRef.current.volume = shouldBeMuted ? 0 : volume * settingsVolume;
 
     if (sfxType === "music" && !isMusic && !audioRef.current.paused) {
@@ -33,23 +49,51 @@ export function useAudio(
     }
   }, [isMusic, isSfx, volume, settingsVolume, sfxType]);
 
-  const play = useCallback(() => {
+  const play = useCallback(async () => {
     if (sfxType === "sfx" && !isSfx) return;
     if (sfxType === "music" && !isMusic) return;
-    if (audioRef.current) {
-      audioRef.current.currentTime = 0;
-      audioRef.current.play().catch(console.error);
+
+    if (!audioRef.current) return;
+
+    try {
+      // For SFX, create a clone to allow overlapping sounds
+      if (sfxType === "sfx") {
+        const audioClone = audioRef.current.cloneNode() as HTMLAudioElement;
+        audioClone.volume = volume * settingsVolume;
+        audioClone.currentTime = 0;
+
+        // Clean up clone after playing
+        audioClone.addEventListener("ended", () => {
+          audioClone.remove();
+        });
+
+        await audioClone.play();
+      } else {
+        // For music, use the original instance
+        audioRef.current.currentTime = 0;
+        await audioRef.current.play();
+      }
+    } catch (error) {
+      console.error("Audio play failed:", error);
     }
-  }, [isMusic, isSfx, sfxType]);
+  }, [isMusic, isSfx, sfxType, volume, settingsVolume]);
 
   const pause = useCallback(() => {
-    if (audioRef.current) {
+    if (audioRef.current && sfxType === "music") {
       audioRef.current.pause();
     }
-  }, []);
+  }, [sfxType]);
+
+  const stop = useCallback(() => {
+    if (audioRef.current && sfxType === "music") {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+    }
+  }, [sfxType]);
 
   return {
     play,
     pause,
+    stop,
   };
 }

@@ -3,6 +3,7 @@ import { useAppDispatch } from "@/hooks/redux";
 import { SmeltPosition, speedUp } from "@/store/smelt";
 import React, { useEffect } from "react";
 import { motion, useMotionValue, useTransform } from "motion/react";
+import { useAudio } from "@/hooks/useAudio";
 
 type SmeltItemProps = {
   index: number;
@@ -24,9 +25,10 @@ function SmeltingItem({ index, item }: SmeltItemProps) {
   }, [item.timeLeft, progress]);
 
   const dispatch = useAppDispatch();
+  const clickSound = useAudio("577025__nezuai__ui-sound-2.wav", 0.5);
 
   return (
-    <div className="relative">
+    <li className="relative">
       <div className="bg-black p-1 absolute bottom-[-5] z-30 left-3 right-3 h-4">
         <motion.div
           className="h-full"
@@ -36,13 +38,13 @@ function SmeltingItem({ index, item }: SmeltItemProps) {
       <ItemTile
         onClick={() => {
           if (!item) return;
-
+          clickSound.play();
           dispatch(speedUp(index));
         }}
         key={index}
-        itemId={item?.result}
+        itemKey={item?.result}
       />
-    </div>
+    </li>
   );
 }
 

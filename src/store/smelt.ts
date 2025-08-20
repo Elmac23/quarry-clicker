@@ -18,7 +18,7 @@ interface SmeltState {
   speed: number;
 }
 
-const INITIAL_FURNACE_COUNT = 5;
+const INITIAL_FURNACE_COUNT = 0;
 
 const initialState: SmeltState = {
   smeltPositions: Array(INITIAL_FURNACE_COUNT).fill(null),

@@ -10,7 +10,7 @@ import { addItem, useInventory } from "@/store/inventory";
 export function useSmeltTick() {
   const smeltingBuff = useCheckBuff("smeltingSpeed");
   const { ownedUpgrades } = useUpgrades();
-  const isAuto = ownedUpgrades.includes("silverHand");
+  const isAuto = ownedUpgrades.includes("silverTray");
   const dispatch = useAppDispatch();
   const inventoryState = useInventory();
   const { smeltPositions } = useSmelt();

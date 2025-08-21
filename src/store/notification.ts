@@ -91,6 +91,91 @@ export const notificationSlice = createSlice({
           });
           break;
 
+        case "steelFurnace":
+        case "stoneFurnace":
+        case "bronzeFurnace":
+        case "chromeFurnace":
+        case "cobaltFurnace":
+          state.notifications.push({
+            itemId: "gear",
+            customMessage: "Unlocked new Furnace!",
+            timer: NOTIFICATION_DURATION,
+          });
+          break;
+
+        case "copperCrate":
+        case "bulletPouch":
+        case "paintCan":
+        case "deepgritPiggyBank":
+        case "mythrilContainer":
+          state.notifications.push({
+            itemId: "gear",
+            customMessage: "+10 Max items per stack!",
+            timer: NOTIFICATION_DURATION,
+          });
+          break;
+
+        case "smallPouch":
+          state.notifications.push({
+            itemId: "gear",
+            customMessage: "+10 Inventory slots!",
+            timer: NOTIFICATION_DURATION,
+          });
+          break;
+
+        case "ironChest":
+        case "aluminiumCrate":
+        case "advancedStorageUnit":
+        case "magicBelt":
+        case "platinumBackpack":
+        case "luxuriousBag":
+          state.notifications.push({
+            itemId: "gear",
+            customMessage: "+20 Inventory slots!",
+            timer: NOTIFICATION_DURATION,
+          });
+          break;
+
+        case "vioriteHatchet":
+        case "azurythMachete":
+        case "crimfireScythe":
+        case "mossilverKnife":
+        case "auroryteBow":
+        case "diamondiumSword":
+          state.notifications.push({
+            itemId: "gear",
+            customMessage: "Increased critical chance!",
+            timer: NOTIFICATION_DURATION,
+          });
+          break;
+
+        case "palestoneHeater":
+        case "goldenThermalRegulator":
+        case "nuclearFuel":
+        case "quantumSmelter":
+          state.notifications.push({
+            itemId: "gear",
+            customMessage: "Smelting is faster!",
+            timer: NOTIFICATION_DURATION,
+          });
+          break;
+
+        case "silverTray":
+          state.notifications.push({
+            itemId: "gear",
+            customMessage: "Smelting is automatic!",
+            timer: NOTIFICATION_DURATION,
+          });
+          break;
+
+        case "palladiumWateringCan":
+          state.notifications.push({
+            itemId: "gear",
+            customMessage: "Garden is automatic!",
+            timer: NOTIFICATION_DURATION,
+          });
+          break;
+
         //   case "furnaceNewUpgrade":
         //     state.notifications.push({
         //       itemId: "gear",

@@ -33,7 +33,11 @@ function Smelting({ isOpen, onClose }: SmeltingModalProps) {
       <Text as="h2" size="xl" color="primary">
         Smelting
       </Text>
-      {!smeltPositions.length && (
+      {smeltPositions.length ? (
+        <Text size="lg" className="w-full">
+          Press Ingot to speed up smelting!
+        </Text>
+      ) : (
         <Text size="xl" className="w-full">
           Craft Stone Furnace first!
         </Text>
@@ -80,6 +84,7 @@ function Smelting({ isOpen, onClose }: SmeltingModalProps) {
           }}
         />
         <ItemTile
+          background={coalQuantity === 0 ? "danger" : "standard"}
           itemKey={"coal"}
           quantityText={`${coalQuantity}`}
           className="h-20"

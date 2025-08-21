@@ -89,7 +89,7 @@ function Ore() {
 
   return (
     <motion.div
-      className="aspect-square size-90 cursor-pointer fixed left-[50%] top-[50%] translate-y-[-50%] translate-x-[-50%] "
+      className="aspect-square min-w-60 w-[60%] max-w-90 cursor-pointer fixed left-[50%] top-[50%] translate-y-[-50%] translate-x-[-50%] "
       whileHover={{
         scale: 1.05,
       }}

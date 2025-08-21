@@ -16,19 +16,19 @@ export function useSmeltTick() {
   const inventoryState = useInventory();
   const { smeltPositions } = useSmelt();
 
-  const multiplier = useMemo(() => {
-    const upgradeMultiplier = ownedUpgrades.reduce((acc, curr) => {
-      if (ITEMS[curr].effect === "furnaceSpeed") return acc * 1.1;
-      return acc;
-    }, 0);
+  // const multiplier = useMemo(() => {
+  //   const upgradeMultiplier = ownedUpgrades.reduce((acc, curr) => {
+  //     if (ITEMS[curr].effect === "furnaceSpeed") return acc * 1.1;
+  //     return acc;
+  //   }, 0);
 
-    return upgradeMultiplier * (smeltingBuff?.value ?? 1);
-  }, [ownedUpgrades, smeltingBuff]);
+  //   return upgradeMultiplier * (smeltingBuff?.value ?? 1);
+  // }, [ownedUpgrades, smeltingBuff]);
 
   const { isEmpty } = useSmelt();
   const [startSmeltingInterval, pauseSmeltingInterval] = useInterval(
     () => {
-      dispatch(tick({ multiplier }));
+      dispatch(tick({ multiplier: smeltingBuff?.value }));
       if (!isAuto) return;
       smeltPositions.forEach((position, index) => {
         if (position && position.isDone) {

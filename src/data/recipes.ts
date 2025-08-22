@@ -1491,7 +1491,7 @@ export const RECIPES = {
     recipe: [
       {
         item: "tinBar",
-        quantity: 7,
+        quantity: 5,
       },
     ],
   },
@@ -1882,7 +1882,7 @@ export const RECIPES = {
     recipe: [
       {
         item: "copperBar",
-        quantity: 7,
+        quantity: 5,
       },
     ],
   },
@@ -1908,15 +1908,15 @@ export const RECIPES = {
       },
       {
         item: "tinCogwheel",
-        quantity: 5,
+        quantity: 3,
       },
       {
         item: "copperCogwheel",
-        quantity: 1,
+        quantity: 3,
       },
       {
         item: "copperWire",
-        quantity: 2,
+        quantity: 5,
       },
     ],
   },

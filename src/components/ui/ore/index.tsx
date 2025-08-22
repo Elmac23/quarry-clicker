@@ -18,6 +18,8 @@ import { motion } from "motion/react";
 import React, { useCallback, useEffect, useState } from "react";
 import { useSettings } from "@/store/settings";
 import { ITEMS } from "@/data/items";
+import { canAddToInventory } from "@/lib/canAddToInventory";
+import { addNotification } from "@/store/notification";
 
 function Ore() {
   const dispatch = useAppDispatch();
@@ -30,6 +32,7 @@ function Ore() {
   const digAudio = useAudio("pickaxe-blow-333695.mp3", 0.5);
   const diggedAudio = useAudio("digged2.wav", 1);
   const damage = useCalculateDamage();
+  const inventoryState = useInventory();
   const { selectedTool } = useInventory();
   const item = ITEMS[selectedTool];
 
@@ -56,14 +59,22 @@ function Ore() {
       setSpriteId(0);
       diggedAudio.play();
       const item = getDrop();
+      const drop = {
+        quantity: lootAmount,
+        id: item,
+      };
       dispatch(resetHealth());
-      dispatch(
-        addItem({
-          quantity: lootAmount,
-          id: item,
-        })
-      );
-    } else {
+
+      if (canAddToInventory(drop, inventoryState)) {
+        dispatch(addItem(drop));
+      } else {
+        dispatch(
+          addNotification({
+            itemId: "gear",
+            customMessage: "Inventory is full!",
+          })
+        );
+      }
     }
   }, [
     damage,
@@ -74,6 +85,7 @@ function Ore() {
     getDrop,
     health,
     mine,
+    inventoryState,
   ]);
 
   useKeyButton(" ", handleClick);

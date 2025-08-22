@@ -30,6 +30,14 @@ const INITIAL_MAX_STACK = 30;
 
 const START_INVENTORY: ItemArray = Array(INITIAL_SIZE).fill(null);
 START_INVENTORY[0] = { id: "woodenPickaxe", quantity: 1 };
+START_INVENTORY[1] = { id: "coal", quantity: 10 };
+START_INVENTORY[2] = { id: "tinBar", quantity: 29 };
+START_INVENTORY[3] = { id: "coalbudSeeds", quantity: 29 };
+
+for (let i = 4; i < 20; i++) {
+  START_INVENTORY[i] = { id: "tinOre", quantity: 30 };
+}
+
 const initialState: InventoryState = {
   items: START_INVENTORY,
   maxStackSize: INITIAL_MAX_STACK,

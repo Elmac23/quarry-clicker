@@ -11,6 +11,8 @@ import Tooltip from "@/components/Tooltip";
 import { useAppDispatch } from "@/hooks/redux";
 import { addItem as addItemToInventory } from "@/store/inventory";
 import { useAudio } from "@/hooks/useAudio";
+import { canAddToInventory } from "@/lib/canAddToInventory";
+import { addNotification } from "@/store/notification";
 
 type FarmModalProps = Pick<ModalProps, "isOpen" | "onClose">;
 
@@ -18,6 +20,7 @@ function Farming({ isOpen, onClose }: FarmModalProps) {
   const { items } = useInventory();
   const dispatch = useAppDispatch();
   const { plantPositions, isFull } = useFarming();
+  const inventoryState = useInventory();
 
   const clickSound = useAudio("577025__nezuai__ui-sound-2.wav", 0.5);
 
@@ -77,14 +80,23 @@ function Farming({ isOpen, onClose }: FarmModalProps) {
                 if (!item) return;
                 if (!item?.isDone) return;
 
+                const drop = {
+                  id: item.result,
+                  quantity: item.quantity,
+                };
+
+                if (!canAddToInventory(drop, inventoryState)) {
+                  dispatch(
+                    addNotification({
+                      customMessage: "Inventory is full!",
+                      itemId: "gear",
+                    })
+                  );
+                  return;
+                }
                 clickSound.play();
                 dispatch(clearPosition(i));
-                dispatch(
-                  addItemToInventory({
-                    id: item.result,
-                    quantity: item.quantity,
-                  })
-                );
+                dispatch(addItemToInventory(drop));
               }}
             />
           )}

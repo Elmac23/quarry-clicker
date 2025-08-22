@@ -27,7 +27,7 @@ function SettingsAndStats({ isOpen, onClose }: SettingsModalProps) {
   return (
     <UIModal isOpen={isOpen} onClose={onClose}>
       <div className="flex flex-col gap-4 custom-scrollbar max-h-96 overflow-y-scroll p-2">
-        <SettingsParagraph>Quarry Clicker 1.0</SettingsParagraph>
+        <SettingsParagraph>Quarry Clicker Beta 1.1</SettingsParagraph>
         <div>
           <SettingsParagraph>Settings</SettingsParagraph>
           <SettingsInput field="isBg">

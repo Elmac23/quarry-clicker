@@ -9,7 +9,7 @@ export function canAddToInventory(
 
   const freeIndex = items.findIndex((item) => !item);
   const resultInInventory = items.find(
-    (item) => item?.id === id && maxStackSize - item.quantity <= quantity
+    (item) => item?.id === id && maxStackSize - item.quantity >= quantity
   );
 
   if (freeIndex === -1 && !resultInInventory) return false;

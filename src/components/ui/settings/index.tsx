@@ -46,15 +46,6 @@ function SettingsAndStats({ isOpen, onClose }: SettingsModalProps) {
             <SettingIndicator value={isSfx} />
             <StatPosition>Sounds</StatPosition>
           </SettingsInput>
-          <Button
-            size="sm"
-            onClick={() => {
-              window.localStorage.removeItem("persist:root");
-              window.location.reload();
-            }}
-          >
-            Remove Save File
-          </Button>
         </div>
         <div className="gap-2 flex flex-col">
           <SettingsParagraph>Statistics</SettingsParagraph>
@@ -98,6 +89,15 @@ function SettingsAndStats({ isOpen, onClose }: SettingsModalProps) {
             ui sound 2.wav
             <span className="inline-block ml-2 font-bold">nezuai</span>
           </StatPosition>
+          <Button
+            size="sm"
+            onClick={() => {
+              window.localStorage.removeItem("persist:root");
+              window.location.reload();
+            }}
+          >
+            Remove Save File
+          </Button>
         </div>
       </div>
     </UIModal>

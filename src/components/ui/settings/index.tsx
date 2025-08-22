@@ -91,6 +91,7 @@ function SettingsAndStats({ isOpen, onClose }: SettingsModalProps) {
           </StatPosition>
           <Button
             size="sm"
+            className="w-40"
             onClick={() => {
               window.localStorage.removeItem("persist:root");
               window.location.reload();

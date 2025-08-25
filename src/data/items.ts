@@ -1089,13 +1089,12 @@ export const ITEMS = {
     name: "Graphite Aluminium Ore",
     icon: "/sprites/items/smeltable/Graphite_Aluminium_Ore.png",
     type: "smeltable",
-    description:
-      "Aluminium ore reinforced with graphite, yields double output.",
+    description: "Lightweight aluminium ore perfect for advanced crafting.",
     result: {
       id: "aluminiumBar",
-      quantity: 2,
+      quantity: 1,
     },
-    smeltTime: 55,
+    smeltTime: 30,
   },
 
   graphiteTitaniumOre: {

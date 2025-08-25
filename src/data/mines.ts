@@ -81,7 +81,7 @@ export const MINES = {
     health: 80,
     drops: {
       standard: "graphite",
-      clay: 80,
+      basalt: 45,
       graphiteIronOre: 150,
       graphiteTinOre: 100,
       graphiteAluminiumOre: 120,

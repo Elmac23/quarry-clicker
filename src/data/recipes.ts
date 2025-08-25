@@ -762,8 +762,8 @@ export const RECIPES = {
         quantity: 2,
       },
       {
-        item: "cobaltBattery",
-        quantity: 12,
+        item: "tinMechanicalComponent",
+        quantity: 3,
       },
     ],
   },

@@ -947,7 +947,7 @@ export const ITEMS = {
     icon: "/sprites/items/upgrades/Viorite_Hatchet.png",
   },
   azurythMachete: {
-    name: "Azuryth_Machete",
+    name: "Azuryth Machete",
     type: "upgrade",
     effect: "criticalChance",
     description: "Increases critical hit chance",

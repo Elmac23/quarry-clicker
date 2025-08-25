@@ -80,8 +80,73 @@ function AddAllItemsDebug() {
       >
         Smeltable
       </Button>
+      <Button
+        size="md"
+        onClick={() => dispatch(addItem({ id: "permitAlpha", quantity: 1 }))}
+        className="mx-2 bg-orange-600 hover:bg-orange-700"
+      >
+        1
+      </Button>
+      <Button
+        size="md"
+        onClick={() => dispatch(addItem({ id: "permitBeta", quantity: 1 }))}
+        className="mx-2 bg-orange-600 hover:bg-orange-700"
+      >
+        2
+      </Button>
+      <Button
+        size="md"
+        onClick={() => dispatch(addItem({ id: "permitGamma", quantity: 1 }))}
+        className="mx-2 bg-orange-600 hover:bg-orange-700"
+      >
+        3
+      </Button>
+      <Button
+        size="md"
+        onClick={() => dispatch(addItem({ id: "permitDelta", quantity: 1 }))}
+        className="mx-2 bg-orange-600 hover:bg-orange-700"
+      >
+        4
+      </Button>
+      <Button
+        size="md"
+        onClick={() => dispatch(addItem({ id: "permitEpsilon", quantity: 1 }))}
+        className="mx-2 bg-orange-600 hover:bg-orange-700"
+      >
+        5
+      </Button>
+      <Button
+        size="md"
+        onClick={() => dispatch(addItem({ id: "permitZeta", quantity: 1 }))}
+        className="mx-2 bg-orange-600 hover:bg-orange-700"
+      >
+        6
+      </Button>
+      <Button
+        size="md"
+        onClick={() => dispatch(addItem({ id: "permitTheta", quantity: 1 }))}
+        className="mx-2 bg-orange-600 hover:bg-orange-700"
+      >
+        7
+      </Button>
+      <Button
+        size="md"
+        onClick={() => dispatch(addItem({ id: "permitKappa", quantity: 1 }))}
+        className="mx-2 bg-orange-600 hover:bg-orange-700"
+      >
+        8
+      </Button>
+      <Button
+        size="md"
+        onClick={() => dispatch(addItem({ id: "permitOmega", quantity: 1 }))}
+        className="mx-2 bg-orange-600 hover:bg-orange-700"
+      >
+        9
+      </Button>
     </>
   );
 }
+
+// dispatch(addItem({ id: itemKey as ItemKey, quantity: 1 }));
 
 export default AddAllItemsDebug;

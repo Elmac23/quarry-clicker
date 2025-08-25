@@ -141,17 +141,7 @@ export const RECIPES = {
       { item: "titaniumPickaxe", quantity: 1 },
     ],
   },
-  cobaltPickaxe: {
-    quantity: 1,
-    requiredUpgrade: "permitDelta",
-    recipe: [
-      {
-        item: "cobaltBar",
-        quantity: 25,
-      },
-      { item: "tungstenPickaxe", quantity: 1 },
-    ],
-  },
+
   azurythPickaxe: {
     quantity: 1,
     requiredUpgrade: "permitDelta",
@@ -160,7 +150,18 @@ export const RECIPES = {
         item: "azurythBar",
         quantity: 25,
       },
-      { item: "cobaltPickaxe", quantity: 1 },
+      { item: "tungstenPickaxe", quantity: 1 },
+    ],
+  },
+  cobaltPickaxe: {
+    quantity: 1,
+    requiredUpgrade: "permitEpsilon",
+    recipe: [
+      {
+        item: "cobaltBar",
+        quantity: 25,
+      },
+      { item: "azurythPickaxe", quantity: 1 },
     ],
   },
   palestonePickaxe: {
@@ -655,7 +656,7 @@ export const RECIPES = {
 
   cobaltFurnace: {
     quantity: 1,
-    requiredUpgrade: "permitDelta",
+    requiredUpgrade: "permitEpsilon",
     recipe: [
       {
         item: "tungstenSupportBracket",
@@ -1094,10 +1095,6 @@ export const RECIPES = {
         quantity: 5,
       },
       {
-        item: "cobaltBattery",
-        quantity: 20,
-      },
-      {
         item: "azurythBar",
         quantity: 5,
       },
@@ -1116,12 +1113,12 @@ export const RECIPES = {
         quantity: 2,
       },
       {
-        item: "goldenBracelet",
-        quantity: 1,
+        item: "cobaltAegis",
+        quantity: 3,
       },
       {
         item: "goldenEarings",
-        quantity: 1,
+        quantity: 3,
       },
       {
         item: "chromeScrew",
@@ -1522,7 +1519,7 @@ export const RECIPES = {
   },
 
   greaterEmptyBottle: {
-    requiredUpgrade: "permitDelta",
+    requiredUpgrade: "permitEpsilon",
     quantity: 1,
     recipe: [
       {
@@ -2317,7 +2314,7 @@ export const RECIPES = {
   },
 
   cobaltCoil: {
-    requiredUpgrade: "permitDelta",
+    requiredUpgrade: "permitEpsilon",
     quantity: 1,
     recipe: [
       {
@@ -2336,7 +2333,7 @@ export const RECIPES = {
   },
 
   cobaltBattery: {
-    requiredUpgrade: "permitDelta",
+    requiredUpgrade: "permitEpsilon",
     quantity: 4,
     recipe: [
       {
@@ -2355,7 +2352,7 @@ export const RECIPES = {
   },
 
   cobaltAegis: {
-    requiredUpgrade: "permitDelta",
+    requiredUpgrade: "permitEpsilon",
     quantity: 1,
     recipe: [
       {

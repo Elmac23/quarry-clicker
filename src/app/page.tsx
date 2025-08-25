@@ -18,10 +18,10 @@ export default function Home() {
         <BG time={30} />
         <MineData />
         <BuffsList />
-        <MineDataDebug />
-        <ClearNottificationsDebug />
-        <ClearBuffsDebug />
-        <AddAllItemsDebug />
+        {/* <MineDataDebug /> */}
+        {/* <ClearNottificationsDebug /> */}
+        {/* <ClearBuffsDebug /> */}
+        {/* <AddAllItemsDebug /> */}
         <Ore />
         <Notifiactions />
         <BottomMenu />
